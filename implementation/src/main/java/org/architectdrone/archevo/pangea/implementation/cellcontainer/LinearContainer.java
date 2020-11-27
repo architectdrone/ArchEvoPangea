@@ -23,7 +23,7 @@ public class LinearContainer implements CellContainer {
     public void set(final int x, final int y, final Cell cell) throws IntersectionException {
         int true_x = Math.floorMod(x, size);
         int true_y = Math.floorMod(y, size);
-        if (all_cell_data.stream().filter((a) -> a.x == true_x && a.y == true_y).count() == 0)
+        if (all_cell_data.stream().noneMatch((a) -> a.x == true_x && a.y == true_y))
         {
             all_cell_data.add(new CellPosition(cell, true_x, true_y));
         }
@@ -51,7 +51,7 @@ public class LinearContainer implements CellContainer {
 
     @Override
     public void delete(final int x, final int y) {
-        all_cell_data = all_cell_data.stream().filter((a) -> a.x != x && a.y != y).collect(Collectors.toList());
+        all_cell_data = all_cell_data.stream().filter((a) -> !(a.x == x && a.y == y)).collect(Collectors.toList());
     }
 
     @Override
