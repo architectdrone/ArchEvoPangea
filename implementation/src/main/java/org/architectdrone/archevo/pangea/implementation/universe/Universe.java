@@ -12,7 +12,7 @@ import org.architectdrone.archevo.pangea.implementation.universe.iterationhelper
 public class Universe {
 
     private final Random randomness;
-    public final UniverseSettings universeSettings;
+    @Getter public final UniverseSettings universeSettings;
     @Getter
     private CellContainer cellContainer;
     @Getter
