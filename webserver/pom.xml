@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>pangea</artifactId>
+		<artifactId>pangea-parent</artifactId>
 		<groupId>org.architectdrone.archevo</groupId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>webserver</artifactId>
-	<name>Pangea</name>
-	<description>Spring Boot Server for interacting with ArchEvo2</description>
+	<artifactId>pangea-webserver</artifactId>
+	<name>Webserver</name>
+	<description>ArchEvo Webserver</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -33,7 +33,7 @@
 		</dependency>
         <dependency>
             <groupId>org.architectdrone.archevo</groupId>
-            <artifactId>implementation</artifactId>
+            <artifactId>pangea-implementation</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
