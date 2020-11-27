@@ -1,6 +1,7 @@
 package org.architectdrone.archevo.pangea.implementation.cell;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.architectdrone.archevo.pangea.implementation.action.Action;
 import org.architectdrone.archevo.pangea.implementation.action.MoveInstructionPointer;
 import org.architectdrone.archevo.pangea.implementation.action.RegisterUpdate;
@@ -13,8 +14,12 @@ import java.util.List;
 
 @EqualsAndHashCode
 public class Cell {
+    static int next_id = 0;
+
     final private int MAX_REGISTER_VALUE = 0xFF;
 
+    @Getter
+    private final int id;
     private final List<Integer> registers; //There should only be 8 of these
     private int IP = 0; //Instruction pointer
     private final List<Integer> genome;
@@ -23,6 +28,7 @@ public class Cell {
     public CellStats cellStats = new CellStats();
 
     public Cell(@NotNull List<Integer> genome, final ISA isa) {
+        this.id = next_id++;
         this.registers = new ArrayList<Integer>(Collections.nCopies(8, 0));
         this.genome = genome;
 
@@ -38,6 +44,7 @@ public class Cell {
 
     public Cell(Cell previous_state, Action action)
     {
+        id = previous_state.getId();
         genome = previous_state.getGenome();
         registers = previous_state.getRegisters();
         isaCachedData = previous_state.getIsaCachedData();
@@ -56,11 +63,12 @@ public class Cell {
 
     }
 
-    public Cell(@NotNull List<Integer> genome, @NotNull List<Integer> registers, int IP, final ISA isa)
+    public Cell(@NotNull List<Integer> genome, @NotNull List<Integer> registers, int IP, final ISA isa, final int id)
     {
         this.registers = registers;
         this.IP = IP;
         this.genome = genome;
+        this.id = id;
         if (isa != null)
         {
             isaCachedData = isa.getISACachedDataGenerator().getCachedData(this);

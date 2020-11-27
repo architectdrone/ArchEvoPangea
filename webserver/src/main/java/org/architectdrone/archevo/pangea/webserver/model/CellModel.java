@@ -15,6 +15,7 @@ public class CellModel {
     final List<InstructionModel> genome;
     final Integer x;
     final Integer y;
+    final Integer id;
     final Integer age;
     final Integer lineage;
     final Integer virility;
@@ -27,6 +28,7 @@ public class CellModel {
         this.x = x;
         this.y = y;
         this.instructionPointer = cell.getIP();
+        this.id = cell.getId();
         this.genome = cell.getGenome().stream().map(instruction -> new InstructionModel(instruction, universeSettings)).collect(Collectors.toList());
         this.registers = IntStream.range(0, 8).mapToObj(i -> new RegisterModel(i, cell.getRegister(i))).collect(Collectors.toList());
     }
