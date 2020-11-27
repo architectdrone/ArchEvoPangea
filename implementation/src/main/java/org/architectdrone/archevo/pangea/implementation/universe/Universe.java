@@ -25,7 +25,7 @@ public class Universe {
         this.randomness = new Random(universeSettings.getSeed());
     }
 
-    public void iterate() throws Exception {
+    public void iterate() {
         numberOfIterations++;
         for (int i = 0; i < universeSettings.getInfluxRate(); i++)
         {
