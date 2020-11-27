@@ -25,17 +25,22 @@ public class CellContainerIterationHelper {
     public static CellContainer iterate(CellContainer cellContainer,
             UniverseSettings universeSettings,
             Random random) {
-        List<CellIterationResultAndPosition> cellIterationResultAndPositionList = cellContainer.getAllPositions()
+        List<CellIterationResultAndPosition> cellIterationResultAndPositionList = cellContainer
+                .getAllPositions()
                 .stream()
-                .filter((cellPosition -> !cellPosition.cell.isDead()))
-                .map((cellPosition) -> {
-                    CellIterationResult cellIterationResult = CellIterationHelper.iterate(
-                            cellPosition.cell,
-                            universeSettings.getIsa(),
-                            getOffsetToCell(cellPosition.x, cellPosition.y, cellContainer),
-                            universeSettings.getIterationExecutionMode());
-                    return new CellIterationResultAndPosition(cellIterationResult, cellPosition);
-                }).collect(Collectors.toList());
+                .filter(
+                        (cellPosition -> !cellPosition.cell.isDead())
+                )
+                .map(
+                        (cellPosition) -> {
+                            CellIterationResult cellIterationResult = CellIterationHelper.iterate(
+                                    cellPosition.cell,
+                                    universeSettings.getIsa(),
+                                    getOffsetToCell(cellPosition.x, cellPosition.y, cellContainer),
+                                    universeSettings.getIterationExecutionMode());
+                            return new CellIterationResultAndPosition(cellIterationResult, cellPosition);
+                        })
+                .collect(Collectors.toList());
 
         CellContainer newCellContainer;
         try {
@@ -57,59 +62,84 @@ public class CellContainerIterationHelper {
             a.cell.cellStats.age++; //Increment age.
             a.cell.setRegister(0, a.cell.getRegister(0)- universeSettings.getIterationCost());
             if (a.action != null) {
-                if (a.action instanceof Move)
-                {
-                    if (a.cell.getRegister(0) > universeSettings.getMoveCost())
-                    {
-                        Move move = (Move) a.action;
-                        int new_x = a.x+move.getXOffset();
-                        int new_y = a.y+move.getYOffset();
-
-                        try {
-                            a.cell.setRegister(0, a.cell.getRegister(0)-universeSettings.getMoveCost());
-                            newCellContainer.set(new_x, new_y, a.cell);
-                            newCellContainer.delete(a.x, a.y);
-                        } catch (IntersectionException e) {
-                            //In this case we do nothing. The cell cannot move to the new location, because a cell is already there.
-                        }
-                    }
-                }
-                else if (a.action instanceof Attack)
-                {
-                    Attack attack = (Attack) a.action;
-                    int attacking_x = a.x+attack.getXOffset();
-                    int attacking_y = a.y+attack.getYOffset();
-                    Cell defendingCell = newCellContainer.get(attacking_x, attacking_y);
-                    CombatResult result = universeSettings.getCombatHandler().getResult(a.cell, defendingCell);
-                    a.cell.setRegister(0, a.cell.getRegister(0)+ result.getAttackerEnergyChange());
-                    if (newCellContainer.get(attacking_x, attacking_y) != null)
-                    {
-                        defendingCell.setRegister(0, defendingCell.getRegister(0)+ result.getDefenderEnergyChange());
-                    }
-                }
-                else {
-                    Reproduce reproduce = (Reproduce) a.action;
-                    int reproducing_x = a.x+reproduce.getXOffset();
-                    int reproducing_y = a.y+reproduce.getYOffset();
-
-                    if (universeSettings.getReproductionHandler().canReproduce(a.cell))
-                    {
-                        try {
-                            Cell baby_cell = getBabyCell(a.cell, universeSettings.getReproductionHandler().newCellEnergy(a.cell), universeSettings.getMutationChance(), random, universeSettings.getIsa());
-                            baby_cell.cellStats.lineage = a.cell.cellStats.lineage+1;
-                            newCellContainer.set(reproducing_x, reproducing_y, baby_cell);
-
-                            a.cell.setRegister(0, a.cell.getRegister(0)-universeSettings.getReproductionHandler().reproductionEnergyCost(a.cell));
-                            a.cell.cellStats.virility++;
-                        } catch (IntersectionException e) {
-                            //If we encounter an exception, that means a cell is already in the place the parent wanted to reproduce in.
-                        }
-                    }
-                }
+                runActionWithExternalEffects(a, newCellContainer, universeSettings, random);
             }
         });
 
         return newCellContainer;
+    }
+
+    private static void runActionWithExternalEffects(CellIterationResultAndPosition a, CellContainer newCellContainer, UniverseSettings universeSettings, Random random)
+    {
+        Action action = a.action;
+        assert action.has_external_effect();
+        Cell cell = a.cell;
+        int cell_x = a.x;
+        int cell_y = a.y;
+        if (action instanceof Move)
+        {
+            runMoveAction((Move) action, cell_x, cell_y, cell, newCellContainer, universeSettings);
+        }
+        else if (action instanceof Attack)
+        {
+            runAttackAction((Attack) action, cell_x, cell_y, cell, newCellContainer, universeSettings);
+        }
+        else if (action instanceof Reproduce){
+            runReproduceAction((Reproduce) action, cell_x, cell_y, cell, newCellContainer, universeSettings, random);
+        }
+        else
+        {
+            throw new RuntimeException("runActionWithExternalEffects called on an unknown state changing action");
+        }
+    }
+
+    private static void runMoveAction(Move move, int initial_x, int initial_y, Cell cell, CellContainer newCellContainer, UniverseSettings universeSettings)
+    {
+        if (cell.getRegister(0) > universeSettings.getMoveCost()) {
+            int new_x = initial_x + move.getXOffset();
+            int new_y = initial_y + move.getYOffset();
+
+            try {
+                cell.setRegister(0, cell.getRegister(0) - universeSettings.getMoveCost());
+                newCellContainer.set(new_x, new_y, cell);
+                newCellContainer.delete(initial_x, initial_y);
+            } catch (IntersectionException e) {
+                //In this case we do nothing. The cell cannot move to the new location, because a cell is already there.
+            }
+        }
+    }
+
+    private static void runAttackAction(Attack attack, int cell_x, int cell_y, Cell cell, CellContainer newCellContainer, UniverseSettings universeSettings)
+    {
+        int attacking_x = cell_x+attack.getXOffset();
+        int attacking_y = cell_y+attack.getYOffset();
+        Cell defendingCell = newCellContainer.get(attacking_x, attacking_y);
+        CombatResult result = universeSettings.getCombatHandler().getResult(cell, defendingCell);
+        cell.setRegister(0, cell.getRegister(0)+ result.getAttackerEnergyChange());
+        if (newCellContainer.get(attacking_x, attacking_y) != null)
+        {
+            defendingCell.setRegister(0, defendingCell.getRegister(0)+ result.getDefenderEnergyChange());
+        }
+    }
+
+    private static void runReproduceAction(Reproduce reproduce, int cell_x, int cell_y, Cell cell, CellContainer newCellContainer, UniverseSettings universeSettings, Random random)
+    {
+        int reproducing_x = cell_x+reproduce.getXOffset();
+        int reproducing_y = cell_y+reproduce.getYOffset();
+
+        if (universeSettings.getReproductionHandler().canReproduce(cell))
+        {
+            try {
+                Cell baby_cell = getBabyCell(cell, universeSettings.getReproductionHandler().newCellEnergy(cell), universeSettings.getMutationChance(), random, universeSettings.getIsa());
+                baby_cell.cellStats.lineage = cell.cellStats.lineage+1;
+                newCellContainer.set(reproducing_x, reproducing_y, baby_cell);
+
+                cell.setRegister(0, cell.getRegister(0)-universeSettings.getReproductionHandler().reproductionEnergyCost(cell));
+                cell.cellStats.virility++;
+            } catch (IntersectionException e) {
+                //If we encounter an exception, that means a cell is already in the place the parent wanted to reproduce in.
+            }
+        }
     }
 
     private static Cell getBabyCell(Cell parent, int initialEnergy, float mutation_chance, Random random, ISA isa) {
