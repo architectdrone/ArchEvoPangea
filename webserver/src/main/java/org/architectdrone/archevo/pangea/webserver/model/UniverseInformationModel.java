@@ -9,6 +9,7 @@ import org.architectdrone.archevo.pangea.implementation.isa.asia.ASIA;
 import org.architectdrone.archevo.pangea.implementation.reproductionhandler.ReproductionHandler;
 import org.architectdrone.archevo.pangea.implementation.reproductionhandler.SetCost;
 import org.architectdrone.archevo.pangea.implementation.universe.Universe;
+import org.architectdrone.archevo.pangea.webserver.service.UniverseService;
 
 @Getter
 public class UniverseInformationModel {
@@ -32,6 +33,8 @@ public class UniverseInformationModel {
     Integer greatestVirility;
     Integer greatestLineage;
 
+    Boolean isRunning;
+
     public UniverseInformationModel(Universe universe)
     {
         this.initialEnergy = universe.getUniverseSettings().getInitialEnergy();
@@ -49,10 +52,12 @@ public class UniverseInformationModel {
 
         this.iterations = universe.getNumberOfIterations();
         this.numberOfOrganisms = universe.getCellContainer().getAll().size();
-        this.averageAge = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.age).average().getAsDouble();
-        this.greatestAge = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.age).max().getAsInt();
-        this.greatestVirility = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.virility).max().getAsInt();
-        this.greatestLineage = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.lineage).max().getAsInt();
+        this.averageAge = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.age).average().orElse(0.0d);
+        this.greatestAge = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.age).max().orElse(0);
+        this.greatestVirility = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.virility).max().orElse(0);
+        this.greatestLineage = universe.getCellContainer().getAll().stream().mapToInt(cell -> cell.cellStats.lineage).max().orElse(0);
+
+        this.isRunning = UniverseService.getIsRunning().get();
     }
 
     private String getReproductionHandlerName(ReproductionHandler reproductionHandler)
