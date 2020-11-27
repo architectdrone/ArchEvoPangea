@@ -15,8 +15,15 @@ public class CellModel {
     final List<InstructionModel> genome;
     final Integer x;
     final Integer y;
+    final Integer age;
+    final Integer lineage;
+    final Integer virility;
     public CellModel(int x, int y, Cell cell, UniverseSettings universeSettings)
     {
+        this.age = cell.cellStats.age;
+        this.lineage = cell.cellStats.lineage;
+        this.virility = cell.cellStats.virility;
+
         this.x = x;
         this.y = y;
         this.instructionPointer = cell.getIP();

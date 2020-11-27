@@ -5,6 +5,7 @@ import org.architectdrone.archevo.pangea.implementation.cell.Cell;
 import org.architectdrone.archevo.pangea.implementation.universe.Universe;
 import org.architectdrone.archevo.pangea.implementation.universe.UniverseSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,18 +14,19 @@ public class UniverseModel {
     Integer size;
     Integer iterations;
 
-    public UniverseModel(Universe universe, UniverseSettings universeSettings)
+    public UniverseModel(Universe universe)
     {
-        for (int x = 0; x < universeSettings.getSize(); x++)
+        cells = new ArrayList<>();
+        for (int x = 0; x < universe.getUniverseSettings().getSize(); x++)
         {
-            for (int y = 0; y < universeSettings.getSize(); y++)
+            for (int y = 0; y < universe.getUniverseSettings().getSize(); y++)
             {
-                Cell result = universe.get(x, y);
+                Cell result = universe.getCellContainer().get(x, y);
                 if (result != null)
-                    this.cells.add(new CellModel(x, y, result, universeSettings));
+                    this.cells.add(new CellModel(x, y, result, universe.getUniverseSettings()));
             }
         }
 
-        this.size = universeSettings.getSize();
+        this.size = universe.getUniverseSettings().getSize();
         this.iterations = universe.getNumberOfIterations();    }
 }

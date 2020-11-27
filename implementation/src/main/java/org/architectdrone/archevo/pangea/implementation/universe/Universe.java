@@ -11,18 +11,26 @@ import org.architectdrone.archevo.pangea.implementation.universe.iterationhelper
 
 public class Universe {
 
-    private final Random randomness;
+    protected final Random randomness;
     @Getter public final UniverseSettings universeSettings;
     @Getter
-    private CellContainer cellContainer;
+    protected CellContainer cellContainer;
     @Getter
-    private int numberOfIterations = 0;
+    protected int numberOfIterations = 0;
 
 
     public Universe(UniverseSettings universeSettings) {
         this.universeSettings = universeSettings;
         this.cellContainer = new LinearContainer(universeSettings.getSize());
         this.randomness = new Random(universeSettings.getSeed());
+    }
+
+    protected Universe(Random randomness, UniverseSettings universeSettings, CellContainer cellContainer, int numberOfIterations)
+    {
+        this.randomness = randomness;
+        this.universeSettings = universeSettings;
+        this.cellContainer = cellContainer;
+        this.numberOfIterations = numberOfIterations;
     }
 
     public void iterate() {
@@ -40,6 +48,12 @@ public class Universe {
 
         }
         cellContainer = CellContainerIterationHelper.iterate(cellContainer, universeSettings, randomness);
+    }
+
+    public static Universe iterateAndReturn(Universe initialUniverse) {
+        Universe newUniverse = new Universe(initialUniverse.randomness, initialUniverse.universeSettings, initialUniverse.cellContainer, initialUniverse.numberOfIterations);
+        newUniverse.iterate();
+        return newUniverse;
     }
 
     private void addRandomCell(int x, int y) throws Exception {
