@@ -8,6 +8,9 @@ import RegisterDisplay from '../RegisterDisplay/RegisterDisplay';
  */
 function CellDisplay(props) {
   const {cell} = props;
+  if (cell === null) {
+    return <h2>Select a cell!</h2>;
+  }
   return <div className="flex-container">
     <h2>Cell #{cell.id}</h2>
     <p>Age: {cell.age}</p>
