@@ -19,7 +19,11 @@ public class UniverseServiceStarter implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Universe universe = new Universe(UniverseSettings.builder().build());
+        Universe universe = new Universe(UniverseSettings.builder()
+                .iterationCost(0)
+                .moveCost(1)
+                .influxRate(1)
+                .size(64).build());
         Runnable universeServiceRunner = () -> UniverseService.run(universe);
         executor.execute(universeServiceRunner);
 

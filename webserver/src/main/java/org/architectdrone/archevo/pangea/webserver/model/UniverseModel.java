@@ -28,5 +28,6 @@ public class UniverseModel {
         }
 
         this.size = universe.getUniverseSettings().getSize();
-        this.iterations = universe.getNumberOfIterations();    }
+        this.iterations = universe.getNumberOfIterations();
+    }
 }
