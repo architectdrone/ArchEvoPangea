@@ -1,7 +1,12 @@
+import React from 'react';
 import './App.css';
 import WorldDisplay from './components/WorldDisplay/WorldDisplay';
 import RegisterDisplay from './components/RegisterDisplay/RegisterDisplay';
 import ProgramDisplay from './components/ProgramDisplay/ProgramDisplay';
+
+/**
+ * The Root App.
+ */
 function App() {
   const program = [
     {
@@ -202,7 +207,7 @@ function App() {
   ];
   return (
     <div>
-      <WorldDisplay cells={[{x: 1, y: 1}]} view_size={900} world_size={10}/>
+      <WorldDisplay cells={[{x: 1, y: 1}]} viewSize={900} worldSize={10}/>
       <RegisterDisplay registers={registers}/>
       <ProgramDisplay instructions={program} instructionPointer={3}/>
     </div>
