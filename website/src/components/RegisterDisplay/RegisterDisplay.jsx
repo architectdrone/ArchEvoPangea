@@ -15,12 +15,12 @@ function RegisterDisplay(props) {
     const leftRegister = registers[i];
     const rightRegister = registers[i+8];
     const newRow = (<tr>
-      <td><b>{leftRegister.name}</b></td>
-      <td>{leftRegister.value}</td>
-      <td>{decimalToBinary(leftRegister.value, 8)}</td>
-      <td><b>{rightRegister.name}</b></td>
-      <td>{rightRegister.value}</td>
-      <td>{decimalToBinary(rightRegister.value, 8)}</td>
+      <td><b>{leftRegister.registerName}</b></td>
+      <td>{leftRegister.registerValue}</td>
+      <td>{decimalToBinary(leftRegister.registerValue, 8)}</td>
+      <td><b>{rightRegister.registerName}</b></td>
+      <td>{rightRegister.registerValue}</td>
+      <td>{decimalToBinary(rightRegister.registerValue, 8)}</td>
     </tr>);
     tableElements.push(newRow);
   }
@@ -37,13 +37,13 @@ RegisterDisplay.propTypes = {
   registers: PropTypes.arrayOf(
       PropTypes.shape(
           {
-            // The name of the register.
-            name: PropTypes.string,
+            // The registerName of the register.
+            registerName: PropTypes.string.isRequired,
             // The value stored in the register.
-            value: PropTypes.number,
+            registerValue: PropTypes.number.isRequired,
           },
       ),
-  ),
+  ).isRequired,
 };
 
 export default RegisterDisplay;

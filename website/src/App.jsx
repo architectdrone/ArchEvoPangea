@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.css';
 import WorldDisplay from './components/WorldDisplay/WorldDisplay';
-import RegisterDisplay from './components/RegisterDisplay/RegisterDisplay';
-import ProgramDisplay from './components/ProgramDisplay/ProgramDisplay';
+import CellDisplay from './components/CellDisplay/CellDisplay';
 
 /**
  * The Root App.
@@ -141,75 +140,86 @@ function App() {
 
   const registers = [
     {
-      name: 'ENERGY',
-      value: 0,
+      registerName: 'ENERGY',
+      registerValue: 0,
     },
     {
-      name: 'LOGO',
-      value: 1,
+      registerName: 'LOGO',
+      registerValue: 1,
     },
     {
-      name: 'GUESS',
-      value: 2,
+      registerName: 'GUESS',
+      registerValue: 2,
     },
     {
-      name: 'REG_A',
-      value: 3,
+      registerName: 'REG_A',
+      registerValue: 3,
     },
     {
-      name: 'REG_B',
-      value: 31,
+      registerName: 'REG_B',
+      registerValue: 31,
     },
     {
-      name: 'REG_C',
-      value: 5,
+      registerName: 'REG_C',
+      registerValue: 5,
     },
     {
-      name: 'REG_D',
-      value: 6,
+      registerName: 'REG_D',
+      registerValue: 6,
     },
     {
-      name: 'IPLOC',
-      value: 7,
+      registerName: 'IPLOC',
+      registerValue: 7,
     },
     {
-      name: 'I_ENERGY',
-      value: 8,
+      registerName: 'I_ENERGY',
+      registerValue: 8,
     },
     {
-      name: 'I_LOGO',
-      value: 9,
+      registerName: 'I_LOGO',
+      registerValue: 9,
     },
     {
-      name: 'I_GUESS',
-      value: 10,
+      registerName: 'I_GUESS',
+      registerValue: 10,
     },
     {
-      name: 'I_REG_A',
-      value: 11,
+      registerName: 'I_REG_A',
+      registerValue: 11,
     },
     {
-      name: 'I_REG_B',
-      value: 12,
+      registerName: 'I_REG_B',
+      registerValue: 12,
     },
     {
-      name: 'I_REG_C',
-      value: 13,
+      registerName: 'I_REG_C',
+      registerValue: 13,
     },
     {
-      name: 'I_REG_D',
-      value: 14,
+      registerName: 'I_REG_D',
+      registerValue: 14,
     },
     {
-      name: 'I_IPLOC',
-      value: 15,
+      registerName: 'I_IPLOC',
+      registerValue: 15,
     },
   ];
+
+  const cell = {
+    x: 5,
+    y: 5,
+    instructionPointer: 4,
+    id: 69420,
+    age: 30,
+    lineage: 3,
+    virility: 5,
+    registers: registers,
+    genome: program,
+  };
   return (
     <div>
       <WorldDisplay cells={[{x: 1, y: 1}]} viewSize={900} worldSize={10}/>
-      <RegisterDisplay registers={registers}/>
-      <ProgramDisplay instructions={program} instructionPointer={3}/>
+      <CellDisplay cell={cell}/>
     </div>
   );
 }
