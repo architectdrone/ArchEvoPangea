@@ -216,9 +216,15 @@ function App() {
     registers: registers,
     genome: program,
   };
+
+  const onClick = (cell) => console.log(cell);
   return (
     <div>
-      <WorldDisplay cells={[{x: 1, y: 1}]} viewSize={900} worldSize={10}/>
+      <WorldDisplay
+        cells={[{x: 1, y: 1}]}
+        viewSize={900}
+        worldSize={10}
+        onClick={onClick}/>
       <CellDisplay cell={cell}/>
     </div>
   );

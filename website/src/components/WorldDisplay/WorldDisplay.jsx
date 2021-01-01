@@ -7,7 +7,7 @@ import './WorldDisplay.css';
  * Displays a 2D grid of cells in the world.
  */
 function WorldDisplay(props) {
-  const {cells, viewSize, worldSize} = props;
+  const {cells, viewSize, worldSize, onClick} = props;
 
   const cellSize = viewSize/worldSize;
 
@@ -15,11 +15,18 @@ function WorldDisplay(props) {
   for (let x = 0; x < worldSize; x++) {
     for (let y = 0; y < worldSize; y++) {
       const cell = findCell(x, y, cells);
+      const specificOnClick = () => {
+        if (onClick !== null) {
+          onClick(cell);
+        }
+      };
       const cellElement = <Cell
         x={x}
         y={y}
         size={cellSize}
-        filled={cell !== null}/>;
+        filled={cell !== null}
+        onClick={specificOnClick}
+      />;
       cellElements.push(cellElement);
     }
   }
@@ -35,7 +42,7 @@ function WorldDisplay(props) {
  * A single rectangle, representing a cell.
  */
 function Cell(props) {
-  const {x, y, size, filled} = props;
+  const {x, y, size, filled, onClick} = props;
   const trueX = x*size;
   const trueY = y*size;
   return (<rect
@@ -44,7 +51,7 @@ function Cell(props) {
     y={trueY}
     width={size}
     height={size}
-    onClick={() => console.log('Looking at '+x+','+y)}/>);
+    onClick={() => onClick()}/>);
 }
 
 /**
@@ -68,16 +75,18 @@ WorldDisplay.propTypes = {
       PropTypes.shape(
           {
             // X Position of the Cell
-            x: PropTypes.number,
+            x: PropTypes.number.isRequired,
             // Y Position of the Cell
-            y: PropTypes.number,
+            y: PropTypes.number.isRequired,
           },
       ),
-  ),
+  ).isRequired,
   // Size, in px, of the grid.
-  viewSize: PropTypes.number,
+  viewSize: PropTypes.number.isRequired,
   // Size, in cells, of the world.
-  worldSize: PropTypes.number,
+  worldSize: PropTypes.number.isRequired,
+  // Click handler. Takes in a cell.
+  onClick: PropTypes.func,
 };
 
 Cell.propTypes = {
@@ -85,6 +94,7 @@ Cell.propTypes = {
   y: PropTypes.number,
   size: PropTypes.number,
   filled: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default WorldDisplay;
