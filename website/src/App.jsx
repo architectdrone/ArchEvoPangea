@@ -1,7 +1,7 @@
-import {React, useState} from 'react';
+import {React} from 'react';
 import './App.css';
-import CellGridDisplay from './components/CellGridDisplay/CellGridDisplay';
-import CellDisplay from './components/CellDisplay/CellDisplay';
+// eslint-disable-next-line max-len
+import CellGridAndInformationDisplay from './components/CellGridAndInformationDisplay/CellGridAndInformationDisplay';
 
 const program = [
   {
@@ -229,22 +229,8 @@ const cell2 = {
  * The Root App.
  */
 function App() {
-  const [cellToDisplay, setCellToDisplay] = useState(null);
-
-  const onClick = (cell) => {
-    setCellToDisplay(cell);
-  };
   return (
-    <div
-      className="flex-container"
-      style={{'flex-direction': 'row', 'display': 'flex'}}>
-      <CellGridDisplay
-        cells={[cell, cell2]}
-        viewSize={900}
-        worldSize={10}
-        onClick={onClick}/>
-      <CellDisplay cell={cellToDisplay}/>
-    </div>
+    <CellGridAndInformationDisplay cells={[cell, cell2]}/>
   );
 }
 
