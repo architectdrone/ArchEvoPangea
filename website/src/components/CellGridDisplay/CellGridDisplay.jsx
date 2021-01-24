@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './WorldDisplay.css';
+import './CellGridDisplay.css';
 
 /**
  * Displays a 2D grid of cells in the world.
  */
-function WorldDisplay(props) {
+function CellGridDisplay(props) {
   const {cells, viewSize, worldSize, onClick} = props;
 
   const cellSize = viewSize/worldSize;
@@ -69,7 +69,7 @@ function findCell(x, y, cells) {
   }
 }
 
-WorldDisplay.propTypes = {
+CellGridDisplay.propTypes = {
   // Cells to display.
   cells: PropTypes.arrayOf(
       PropTypes.shape(
@@ -97,4 +97,4 @@ Cell.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
-export default WorldDisplay;
+export default CellGridDisplay;

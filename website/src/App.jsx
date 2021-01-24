@@ -1,6 +1,6 @@
 import {React, useState} from 'react';
 import './App.css';
-import WorldDisplay from './components/WorldDisplay/WorldDisplay';
+import CellGridDisplay from './components/CellGridDisplay/CellGridDisplay';
 import CellDisplay from './components/CellDisplay/CellDisplay';
 
 const program = [
@@ -238,7 +238,7 @@ function App() {
     <div
       className="flex-container"
       style={{'flex-direction': 'row', 'display': 'flex'}}>
-      <WorldDisplay
+      <CellGridDisplay
         cells={[cell, cell2]}
         viewSize={900}
         worldSize={10}
