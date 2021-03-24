@@ -35,7 +35,7 @@ function CellGridAndInformationDisplay(props) {
       <CellGridDisplay
         cells={cells}
         viewSize={900}
-        worldSize={10}
+        worldSize={64}
         onClick={onClick}/>
       <CellDisplay cell={cellToDisplay}/>
     </div>
