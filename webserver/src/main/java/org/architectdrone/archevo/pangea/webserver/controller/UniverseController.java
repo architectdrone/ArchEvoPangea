@@ -3,10 +3,12 @@ package org.architectdrone.archevo.pangea.webserver.controller;
 import org.architectdrone.archevo.pangea.webserver.model.UniverseInformationModel;
 import org.architectdrone.archevo.pangea.webserver.model.UniverseModel;
 import org.architectdrone.archevo.pangea.webserver.service.UniverseService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
 public class UniverseController {
 
