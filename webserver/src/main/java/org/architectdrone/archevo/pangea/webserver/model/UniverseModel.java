@@ -2,6 +2,7 @@ package org.architectdrone.archevo.pangea.webserver.model;
 
 import lombok.Getter;
 import org.architectdrone.archevo.pangea.implementation.cell.Cell;
+import org.architectdrone.archevo.pangea.implementation.misc.OffsetToCell;
 import org.architectdrone.archevo.pangea.implementation.universe.Universe;
 import org.architectdrone.archevo.pangea.implementation.universe.UniverseSettings;
 
@@ -23,11 +24,19 @@ public class UniverseModel {
             {
                 Cell result = universe.getCellContainer().get(x, y);
                 if (result != null)
-                    this.cells.add(new CellModel(x, y, result, universe.getUniverseSettings()));
+                {
+                    OffsetToCell offsetToCell = getOffsetToCell(universe, x, y);
+                    this.cells.add(new CellModel(x, y, result, universe.getUniverseSettings(), offsetToCell));
+                }
             }
         }
 
         this.size = universe.getUniverseSettings().getSize();
         this.iterations = universe.getNumberOfIterations();
+    }
+
+    OffsetToCell getOffsetToCell(final Universe universe, final int x, final int y)
+    {
+        return (x_off, y_off) -> universe.get(x +x_off, y +y_off);
     }
 }

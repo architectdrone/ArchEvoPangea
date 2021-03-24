@@ -138,7 +138,7 @@ public class ASIA implements ISA {
         return new RegisterUpdate(new_value, register.getRegisterNumber());
     }
 
-    private int getRegisterValue(Cell cell, ASIARegister register, OffsetToCell offsetToCell)
+    public static int getRegisterValue(Cell cell, ASIARegister register, OffsetToCell offsetToCell)
     {
         Cell cell_to_get;
         if (register.isVirtualRegister())
@@ -167,7 +167,7 @@ public class ASIA implements ISA {
         return cell.getRegister(registerNumber);
     }
 
-    private Offset iplocToOffset(int iploc) {
+    private static Offset iplocToOffset(int iploc) {
         if (iploc >>> 7 == 1) {
             return new Offset(1, 1);
         } else if (iploc >>> 6 == 1) {

@@ -2,6 +2,9 @@ package org.architectdrone.archevo.pangea.webserver.model;
 
 import lombok.Getter;
 import org.architectdrone.archevo.pangea.implementation.cell.Cell;
+import org.architectdrone.archevo.pangea.implementation.isa.asia.ASIA;
+import org.architectdrone.archevo.pangea.implementation.isa.asia.ASIARegister;
+import org.architectdrone.archevo.pangea.implementation.misc.OffsetToCell;
 import org.architectdrone.archevo.pangea.implementation.universe.UniverseSettings;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class CellModel {
     final Integer age;
     final Integer lineage;
     final Integer virility;
-    public CellModel(int x, int y, Cell cell, UniverseSettings universeSettings)
+    public CellModel(int x, int y, Cell cell, UniverseSettings universeSettings, OffsetToCell offsetToCell)
     {
         this.age = cell.cellStats.age;
         this.lineage = cell.cellStats.lineage;
@@ -30,6 +33,21 @@ public class CellModel {
         this.instructionPointer = cell.getIP();
         this.id = cell.getId();
         this.genome = cell.getGenome().stream().map(instruction -> new InstructionModel(instruction, universeSettings)).collect(Collectors.toList());
-        this.registers = IntStream.range(0, 8).mapToObj(i -> new RegisterModel(i, cell.getRegister(i))).collect(Collectors.toList());
+        this.registers = IntStream.range(0, 16)
+                .mapToObj(i -> new RegisterModel(i, registerNumberToValue(i, cell, offsetToCell)))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Gets the value of a register, given it's value. Also supports virtual registers! TODO: Support different ISAs
+     * @param registerNumber The number of the register
+     * @param cell The cell
+     * @param offsetToCell mapping function between an offset and a cell
+     * @return The value of the register.
+     */
+    public static int registerNumberToValue(Integer registerNumber, Cell cell, OffsetToCell offsetToCell)
+    {
+        ASIARegister register = ASIARegister.fromBinary(registerNumber);
+        return ASIA.getRegisterValue(cell, register, offsetToCell);
     }
 }
