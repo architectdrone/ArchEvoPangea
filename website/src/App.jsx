@@ -2,6 +2,7 @@ import {React} from 'react';
 import './App.css';
 // eslint-disable-next-line max-len
 import CellGridAndInformationDisplay from './components/CellGridAndInformationDisplay/CellGridAndInformationDisplay';
+import WorldController from './components/WorldController/WorldController';
 
 const program = [
   {
@@ -225,12 +226,24 @@ const cell2 = {
   genome: program,
 };
 
+/** Lol */
+function printDude() {
+  console.log('Dude');
+}
+
 /**
  * The Root App.
  */
 function App() {
   return (
-    <CellGridAndInformationDisplay cells={[cell, cell2]}/>
+    <>
+      <WorldController
+        startHandler={printDude}
+        stepHandler={printDude}
+        stopHandler={printDude}
+        currentServerState="LOL"/>
+      <CellGridAndInformationDisplay cells={[cell, cell2]}/>
+    </>
   );
 }
 

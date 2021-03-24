@@ -18,6 +18,8 @@
         "react"
     ],
     "rules": {
-        "valid-jsdoc": "off"
+        "valid-jsdoc": "off",
+        "linebreak-style": "off",
+        "indent": "off"
     }
 }
