@@ -7,9 +7,11 @@ import PropTypes from 'prop-types';
  */
 function ProgramDisplay(props) {
   const {instructions, instructionPointer} = props;
-
+  console.log(instructions);
   const instructionElements = [];
-  for (let i = 0; i < 32; i++) {
+  for (let i = 0; i < 16; i++) {
+    console.log(instructions[i]);
+    console.log(i);
     const {translatedInstruction, instruction} = instructions[i];
 
     instructionElements.push(
