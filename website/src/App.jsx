@@ -3,9 +3,8 @@ import './App.css';
 // eslint-disable-next-line max-len
 import CellGridAndInformationDisplay from './components/CellGridAndInformationDisplay/CellGridAndInformationDisplay';
 import WorldController from './components/WorldController/WorldController';
-import './util/archevoApiWrapper';
-import {getInformation, getState} from './util/archevoApiWrapper';
-import {getInfluxRate, getWorldSize} from './util/archEvoBasicInfo';
+import {getInformation, getState} from './util/archEvo/Wrapper';
+import {getInfluxRate, getWorldSize} from './util/archEvo/BasicInfo';
 
 /**
  * The Root App.

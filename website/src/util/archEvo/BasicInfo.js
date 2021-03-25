@@ -1,4 +1,4 @@
-import {getInformation} from './archevoApiWrapper';
+import {getInformation} from './Wrapper';
 /**
  * This provides accessors for information about the world that doesn't change.
  * It uses a fairly dumb caching system that works well enough for my purposes.
