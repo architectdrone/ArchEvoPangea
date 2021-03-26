@@ -2,13 +2,15 @@ package org.architectdrone.archevo.pangea.implementation.cellcontainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.SneakyThrows;
 import org.architectdrone.archevo.pangea.implementation.cell.Cell;
 import org.architectdrone.archevo.pangea.implementation.cellcontainer.exceptions.AlreadyLoadedException;
 import org.architectdrone.archevo.pangea.implementation.cellcontainer.exceptions.IntersectionException;
 
 public class LinearContainer implements CellContainer {
     private List<CellPosition> all_cell_data;
-    private int size;
+    private final int size;
     public LinearContainer(Integer size) {
         all_cell_data = new ArrayList<>();
         this.size = size;
@@ -56,7 +58,8 @@ public class LinearContainer implements CellContainer {
 
     @Override
     public List<Cell> getAll() {
-        return all_cell_data.stream().map((a) -> a.cell).collect(Collectors.toList());
+        List<CellPosition> copy = new ArrayList<>(all_cell_data);
+        return copy.stream().map((a) -> a.cell).collect(Collectors.toList());
     }
 
     @Override
