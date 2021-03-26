@@ -10,7 +10,6 @@ import CellDisplay from '../CellDisplay/CellDisplay';
 function CellGridAndInformationDisplay(props) {
   const {cells} = props;
   const [cellIdToDisplay, setCellIdToDisplay] = useState(null);
-
   let cellToDisplay = null;
   if (cellIdToDisplay !== null) {
     // eslint-disable-next-line react/prop-types
@@ -19,7 +18,7 @@ function CellGridAndInformationDisplay(props) {
       cellToDisplay = matchingCells[0];
     } else {
       cellToDisplay = null;
-      cellIdToDisplay = null;
+      setCellIdToDisplay(null);
     }
   }
 
