@@ -107,7 +107,7 @@ public class Cell {
 
         if (registerNumber == 0)
         {
-            if (newRegisterValue < 0)
+            if (newRegisterValue <= 0)
             {
                 dead = true;
                 registers.set(0, 0);

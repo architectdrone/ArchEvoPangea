@@ -375,6 +375,7 @@ class CellContainerIterationHelperTest {
                 .build();
         cellContainer = new LinearContainer(size);
         cell = new Cell(new ArrayList<>(Collections.nCopies(16, universeSettings.getIsa().stringToBinary("UNASSIGNED"))), null);
+        cell.setRegister(0, 5);
         cellContainer.set(1, 1, cell);
         CellContainer newCellContainer = CellContainerIterationHelper.iterate(cellContainer, universeSettings, new Random());
         assertEquals(1, newCellContainer.get(1, 1).getIP());
