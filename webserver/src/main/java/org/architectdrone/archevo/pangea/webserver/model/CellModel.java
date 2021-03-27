@@ -33,8 +33,12 @@ public class CellModel {
         this.instructionPointer = cell.getIP();
         this.id = cell.getId();
         this.genome = cell.getGenome().stream().map(instruction -> new InstructionModel(instruction, universeSettings)).collect(Collectors.toList());
+        int iploc = ASIA.getIploc(cell);
+        int otherCellXOffset = ASIA.iplocToXOffset(iploc);
+        int otherCellYOffset = ASIA.iplocToYOffset(iploc);
+        Cell otherCell = offsetToCell.f(otherCellXOffset, otherCellYOffset);
         this.registers = IntStream.range(0, 16)
-                .mapToObj(i -> new RegisterModel(i, registerNumberToValue(i, cell, offsetToCell)))
+                .mapToObj(i -> new RegisterModel(i, registerNumberToValue(i, cell, otherCell)))
                 .collect(Collectors.toList());
     }
 
@@ -49,5 +53,18 @@ public class CellModel {
     {
         ASIARegister register = ASIARegister.fromBinary(registerNumber);
         return ASIA.getRegisterValue(cell, register, offsetToCell);
+    }
+
+    /**
+     * Gets the value of a register, given it's value. Also supports virtual registers! TODO: Support different ISAs
+     * @param registerNumber The number of the register
+     * @param cell The cell
+     * @param otherCell The other cell
+     * @return The value of the register.
+     */
+    public static int registerNumberToValue(Integer registerNumber, Cell cell, Cell otherCell)
+    {
+        ASIARegister register = ASIARegister.fromBinary(registerNumber);
+        return ASIA.getRegisterValue(cell, register, otherCell);
     }
 }

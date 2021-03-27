@@ -162,6 +162,29 @@ public class ASIA implements ISA {
 
     }
 
+    public static int getRegisterValue(Cell cell, ASIARegister register, Cell otherCell)
+    {
+        Cell cell_to_get;
+        if (register.isVirtualRegister())
+        {
+            cell_to_get = otherCell;
+        }
+        else
+        {
+            cell_to_get = cell;
+        }
+
+        if (cell_to_get == null)
+        {
+            return 0;
+        }
+        else
+        {
+            return cell_to_get.getRegister(register.getRegisterNumber());
+        }
+
+    }
+
     private int getRegisterValue(Cell cell, int registerNumber)
     {
         return cell.getRegister(registerNumber);
@@ -188,6 +211,19 @@ public class ASIA implements ISA {
             return new Offset(-1, -1);
         }
         return new Offset(-1, -1);
+    }
+
+    public static int getIploc(Cell cell)
+    {
+        return cell.getRegister(0b111);
+    }
+
+    public static int iplocToXOffset(int iploc) {
+        return iplocToOffset(iploc).x;
+    }
+
+    public static int iplocToYOffset(int iploc) {
+        return iplocToOffset(iploc).y;
     }
 }
 

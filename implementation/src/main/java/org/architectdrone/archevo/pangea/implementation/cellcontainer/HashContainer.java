@@ -71,6 +71,11 @@ public class HashContainer implements CellContainer {
     }
 
     @Override
+    public List<CellPosition> getAllPositionsSafe() {
+        return getAllPositions(); //Again, what could go wrong? :3
+    }
+
+    @Override
     public void load(final List<CellPosition> cells) throws AlreadyLoadedException {
         if (cells_are_loaded)
         {

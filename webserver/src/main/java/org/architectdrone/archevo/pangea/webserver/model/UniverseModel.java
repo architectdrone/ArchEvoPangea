@@ -8,6 +8,7 @@ import org.architectdrone.archevo.pangea.implementation.universe.UniverseSetting
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class UniverseModel {
@@ -17,20 +18,19 @@ public class UniverseModel {
 
     public UniverseModel(Universe universe)
     {
-        cells = new ArrayList<>();
-        for (int x = 0; x < universe.getUniverseSettings().getSize(); x++)
-        {
-            for (int y = 0; y < universe.getUniverseSettings().getSize(); y++)
-            {
-                Cell result = universe.getCellContainer().getSafe(x, y);
-                if (result != null)
-                {
-                    OffsetToCell offsetToCell = getOffsetToCell(universe, x, y);
-                    this.cells.add(new CellModel(x, y, result, universe.getUniverseSettings(), offsetToCell));
-                }
-            }
-        }
-
+        cells = universe
+                .getCellContainer()
+                .getAllPositionsSafe()
+                .stream()
+                .map(cellPosition -> new CellModel(
+                        cellPosition.x,
+                        cellPosition.y,
+                        cellPosition.cell,
+                        universe.getUniverseSettings(),
+                        getOffsetToCell(universe,
+                                cellPosition.x,
+                                cellPosition.y)))
+                .collect(Collectors.toList());
         this.size = universe.getUniverseSettings().getSize();
         this.iterations = universe.getNumberOfIterations();
     }

@@ -13,5 +13,6 @@ public interface CellContainer {
     void delete(int x, int y);
     List<Cell> getAll();
     List<CellPosition> getAllPositions();
+    List<CellPosition> getAllPositionsSafe();
     void load(List<CellPosition> cells) throws AlreadyLoadedException;
 }

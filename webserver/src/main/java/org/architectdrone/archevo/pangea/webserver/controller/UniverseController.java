@@ -42,6 +42,9 @@ public class UniverseController {
     public UniverseInformationModel step()
     {
         UniverseService.getShouldStep().set(true);
+        //TODO: Find a better way to do this.
+        while (UniverseService.getShouldStep().get()) {}
+
         return getInformation();
     }
 }

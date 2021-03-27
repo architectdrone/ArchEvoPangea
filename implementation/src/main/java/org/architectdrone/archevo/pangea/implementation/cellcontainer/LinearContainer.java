@@ -88,6 +88,11 @@ public class LinearContainer implements CellContainer {
     }
 
     @Override
+    public List<CellPosition> getAllPositionsSafe() {
+        return new ArrayList<>(all_cell_data);
+    }
+
+    @Override
     public void load(final List<CellPosition> cells) throws AlreadyLoadedException {
         if (all_cell_data.size() != 0)
         {
