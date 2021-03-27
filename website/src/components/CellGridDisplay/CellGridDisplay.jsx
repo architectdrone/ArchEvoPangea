@@ -45,6 +45,7 @@ function Cell(props) {
   const {x, y, size, filled, onClick} = props;
   const trueX = x*size;
   const trueY = y*size;
+
   return (<rect
     className={filled?'filled':'empty'}
     x={trueX}

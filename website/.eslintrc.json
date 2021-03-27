@@ -20,6 +20,8 @@
     "rules": {
         "valid-jsdoc": "off",
         "linebreak-style": "off",
-        "indent": "off"
+        "indent": "off",
+        "no-unused-vars": "off",
+        "quotes": "off"
     }
 }
