@@ -7,9 +7,14 @@ import {
     getIterationCost,
     getInitialEnergy,
     getGreatestVirility,
+    getLongestLineage,
+    getGreatestAge,
+    getIterations,
  } from '../../util/archEvo/objects/UniverseInformation';
 import NumberOfOrganismsData from './NumberOfOrganismsData';
 import GreatestVirilityData from './GreatestVirilityData';
+import LongestLineageData from './LongestLineageData';
+import GreatestAgeData from './GreatestAgeData';
 
 /**
  * Displays general information about the world
@@ -19,12 +24,14 @@ import GreatestVirilityData from './GreatestVirilityData';
 
     const numberOfOrganisms = getNumberOfOrganisms(universeInformation);
     const greatestVirility = getGreatestVirility(universeInformation);
+    const longestLineage = getLongestLineage(universeInformation);
+    const greatestAge = getGreatestAge(universeInformation);
 
     const worldSize = getWorldSize(universeInformation);
     const influxRate = getInfluxRate(universeInformation);
     const iterationCost = getIterationCost(universeInformation);
     const initialEnergy = getInitialEnergy(universeInformation);
-
+    const iterations = getIterations(universeInformation);
     return (
         <table>
             <NumberOfOrganismsData
@@ -35,6 +42,12 @@ import GreatestVirilityData from './GreatestVirilityData';
               initialEnergy={initialEnergy}
               />
             <GreatestVirilityData greatestVirility={greatestVirility}/>
+            <LongestLineageData
+                longestLineage={longestLineage}
+                iterations = {iterations} />
+            <GreatestAgeData
+                greatestAge={greatestAge}
+                iterations = {iterations}/>
         </table>
     );
 }
