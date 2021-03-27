@@ -6,8 +6,10 @@ import {
     getInfluxRate,
     getIterationCost,
     getInitialEnergy,
+    getGreatestVirility,
  } from '../../util/archEvo/objects/UniverseInformation';
 import NumberOfOrganismsData from './NumberOfOrganismsData';
+import GreatestVirilityData from './GreatestVirilityData';
 
 /**
  * Displays general information about the world
@@ -16,6 +18,7 @@ import NumberOfOrganismsData from './NumberOfOrganismsData';
     const {universeInformation} = props;
 
     const numberOfOrganisms = getNumberOfOrganisms(universeInformation);
+    const greatestVirility = getGreatestVirility(universeInformation);
 
     const worldSize = getWorldSize(universeInformation);
     const influxRate = getInfluxRate(universeInformation);
@@ -31,6 +34,7 @@ import NumberOfOrganismsData from './NumberOfOrganismsData';
               iterationCost={iterationCost}
               initialEnergy={initialEnergy}
               />
+            <GreatestVirilityData greatestVirility={greatestVirility}/>
         </table>
     );
 }
