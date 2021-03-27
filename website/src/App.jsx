@@ -4,33 +4,54 @@ import './App.css';
 import CellGridAndInformationDisplay from './components/CellGridAndInformationDisplay/CellGridAndInformationDisplay';
 import WorldController from './components/WorldController/WorldController';
 import {getInformation, getState} from './util/archEvo/Wrapper';
-import {getInfluxRate, getWorldSize} from './util/archEvo/BasicInfo';
+import {getCells} from './util/archEvo/objects/Universe';
+// eslint-disable-next-line max-len
+import GeneralWorldInformationDisplay from './components/GeneralWorldInformationDisplay/GeneralWorldInformationDisplay';
+
+const autoUpdateUniverse = false;
+
+/**
+ * Performs update
+ * @param setUniverseInformation Sets the universe information.
+ * @param setUniverseState Sets the universe state.
+ */
+function update(setUniverseInformation, setUniverseState, updateUniverseState) {
+  console.log("Sending request!");
+  getInformation()
+  .then((information) => setUniverseInformation(information))
+  .then(console.log("Recieving request!"));
+  if (updateUniverseState) {
+    getState().then((state) => setUniverseState(state));
+  }
+}
 
 /**
  * The Root App.
  */
 function App() {
-  const [cells, setCells] = useState([]);
-  const [size, setSize] = useState(0);
-  const [influxRate, setInfluxRate] = useState(0);
-  useEffect(() => getState()
-    .then((state) => setCells(state.cells))
-    .then(console.log('Foo'))
-      , []);
-  getWorldSize()
-    .then((a) => setSize(a));
-  getInfluxRate()
-    .then((a) => setInfluxRate(a));
+  const [universeInformation, setUniverseInformation] = useState({});
+  const [universeState, setUniverseState] = useState({});
+  useEffect(() => {
+    update(setUniverseInformation, setUniverseState, true);
+    setInterval(() =>
+      update(setUniverseInformation, setUniverseState, true), 1000);
+  }, []);
+
+  if (!universeState.cells) {
+    return (
+      <p>Loading....</p>
+    );
+  }
   return (
     <>
-    <p>Size: {size}</p>
-    <p>Influx: {influxRate}</p>
       <WorldController
         startHandler={getInformation}
         stepHandler={getState}
         stopHandler={getState}
         currentServerState="LOL"/>
-      <CellGridAndInformationDisplay cells={cells}/>
+      <CellGridAndInformationDisplay cells={getCells(universeState)}/>
+      <GeneralWorldInformationDisplay
+        universeInformation={universeInformation}/>
     </>
   );
 }
