@@ -38,9 +38,29 @@ public class LinearContainer implements CellContainer {
 
     @Override
     public Cell get(final int x, final int y) {
+        return get(x, y, false);
+    }
+
+    @Override
+    public Cell getSafe(int x, int y) {
+        return get(x, y, true);
+    }
+
+    private Cell get(int x, int y, boolean safe)
+    {
         int true_x = Math.floorMod(x, size);
         int true_y = Math.floorMod(y, size);
-        List<CellPosition> matching_position = all_cell_data.stream().filter((a) -> a.x == true_x && a.y == true_y).collect(Collectors.toList());
+
+        List<CellPosition> toStream;
+        if (safe) {
+            toStream = new ArrayList<>(all_cell_data);
+        }
+        else
+        {
+            toStream = all_cell_data;
+        }
+
+        List<CellPosition> matching_position = toStream.stream().filter((a) -> a.x == true_x && a.y == true_y).collect(Collectors.toList());
         if (matching_position.size() == 0)
         {
             return null;

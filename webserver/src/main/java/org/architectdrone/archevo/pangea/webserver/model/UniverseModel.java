@@ -22,7 +22,7 @@ public class UniverseModel {
         {
             for (int y = 0; y < universe.getUniverseSettings().getSize(); y++)
             {
-                Cell result = universe.getCellContainer().get(x, y);
+                Cell result = universe.getCellContainer().getSafe(x, y);
                 if (result != null)
                 {
                     OffsetToCell offsetToCell = getOffsetToCell(universe, x, y);
@@ -37,6 +37,6 @@ public class UniverseModel {
 
     OffsetToCell getOffsetToCell(final Universe universe, final int x, final int y)
     {
-        return (x_off, y_off) -> universe.get(x +x_off, y +y_off);
+        return (x_off, y_off) -> universe.getCellContainer().getSafe(x + x_off, y + y_off);
     }
 }

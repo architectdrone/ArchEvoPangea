@@ -49,6 +49,11 @@ public class HashContainer implements CellContainer {
     }
 
     @Override
+    public Cell getSafe(int x, int y) {
+        return get(x, y); //What could go wrong :3
+    }
+
+    @Override
     public void delete(final int x, final int y) {
         int true_x = Math.floorMod(x, size);
         int true_y = Math.floorMod(y, size);
