@@ -14,7 +14,11 @@ import GeneralWorldInformationDisplay from './components/GeneralWorldInformation
 import {getIterations,
    isServerRunning} from './util/archEvo/objects/UniverseInformation';
 
-const autoUpdateUniverse = false;
+/**
+ * These variables control the autoupdate functionality.
+ * This is janky, but so is javascript. 🤷‍♂️
+ */
+let autoUpdate = false; // If general autoupdates occur
 
 /**
  * Performs update
@@ -22,10 +26,11 @@ const autoUpdateUniverse = false;
  * @param setUniverseState Sets the universe state.
  */
 function update(setUniverseInformation, setUniverseState, updateUniverseState) {
-  console.log("Sending request!");
   getInformation()
-  .then((information) => setUniverseInformation(information))
-  .then(console.log("Recieving request!"));
+  .then((information) => {
+    autoUpdate = isServerRunning(information);
+    setUniverseInformation(information);
+  });
   if (updateUniverseState) {
     getState().then((state) => setUniverseState(state));
   }
@@ -37,7 +42,7 @@ function update(setUniverseInformation, setUniverseState, updateUniverseState) {
  * @param setUniverseInformation The universe setting function.
  */
 function doAndUpdateInformation(control, setUniverseInformation) {
-  control().then((a) => setUniverseInformation(a));
+  control().then(update(setUniverseInformation, null, false));
 }
 
 /**
@@ -56,10 +61,14 @@ function doAndUpdateInformation(control, setUniverseInformation) {
 function App() {
   const [universeInformation, setUniverseInformation] = useState({});
   const [universeState, setUniverseState] = useState({});
+
   useEffect(() => {
     update(setUniverseInformation, setUniverseState, true);
-    // setInterval(() =>
-    //   update(setUniverseInformation, setUniverseState, true), 1000);
+    setInterval(() => {
+      if (autoUpdate) {
+        update(setUniverseInformation, setUniverseState, true);
+      }
+    }, 1000);
   }, []);
 
   if (!universeState.cells) {
