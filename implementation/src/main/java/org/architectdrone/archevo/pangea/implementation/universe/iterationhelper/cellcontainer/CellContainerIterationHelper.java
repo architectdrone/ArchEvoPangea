@@ -132,6 +132,17 @@ public class CellContainerIterationHelper {
             try {
                 Cell baby_cell = getBabyCell(cell, universeSettings.getReproductionHandler().newCellEnergy(cell), universeSettings.getMutationChance(), random, universeSettings.getIsa());
                 baby_cell.cellStats.lineage = cell.cellStats.lineage+1;
+                baby_cell.cellStats.parent_id = cell.getId();
+                if (cell.cellStats.lineage == 0) {
+                    baby_cell.cellStats.newSpeciesColor();
+                }
+                else
+                {
+                    baby_cell.cellStats.species_h = cell.cellStats.species_h;
+                    baby_cell.cellStats.species_s = cell.cellStats.species_s;
+                    baby_cell.cellStats.species_v = cell.cellStats.species_v;
+                    baby_cell.cellStats.mutateSpeciesColor();
+                }
                 newCellContainer.set(reproducing_x, reproducing_y, baby_cell);
 
                 cell.setRegister(0, cell.getRegister(0)-universeSettings.getReproductionHandler().reproductionEnergyCost(cell));
