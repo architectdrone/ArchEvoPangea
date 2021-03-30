@@ -35,7 +35,8 @@ function CellGridAndInformationDisplay(props) {
         cells={cells}
         viewSize={900}
         worldSize={64}
-        onClick={onClick}/>
+        onClick={onClick}
+        colorMode={1}/>
       <CellDisplay cell={cellToDisplay}/>
     </div>
   );

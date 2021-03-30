@@ -8,7 +8,7 @@ import {getEnergy, getRegisters} from '../../util/archEvo/objects/Cell';
  * Displays a 2D grid of cells in the world.
  */
 function CellGridDisplay(props) {
-  const {cells, viewSize, worldSize, onClick} = props;
+  const {cells, viewSize, worldSize, onClick, colorMode} = props;
 
   const cellSize = viewSize/worldSize;
 
@@ -22,18 +22,31 @@ function CellGridDisplay(props) {
         }
       };
 
-      let life;
-      if (cell) {
-        life = getEnergy(cell);
+      let cellElement;
+      if (cell !== null) {
+        let color;
+        if (colorMode == 0) { // Basic
+          color = {r: 0, g: 0, b: 0};
+        } else if (colorMode == 1) { // Energy
+          color = {r: 0, g: getEnergy(cell), b: 0};
+        }
+        cellElement = <Cell
+          x={x}
+          y={y}
+          size={cellSize}
+          color={color}
+          filled={true}
+          onClick={specificOnClick}
+        />;
+      } else {
+        cellElement = <Cell
+          x={x}
+          y={y}
+          size={cellSize}
+          filled={false}
+          onClick={specificOnClick}
+        />;
       }
-      const cellElement = <Cell
-        x={x}
-        y={y}
-        size={cellSize}
-        color={{r: 0, g: life, b: 0}}
-        filled={cell !== null}
-        onClick={specificOnClick}
-      />;
       cellElements.push(cellElement);
     }
   }
@@ -103,16 +116,20 @@ CellGridDisplay.propTypes = {
   worldSize: PropTypes.number.isRequired,
   // Click handler. Takes in a cell.
   onClick: PropTypes.func,
+  // Defines how colors are rendered. Possible values are:
+  // 0 - Basic
+  // 1 - Energy
+  colorMode: PropTypes.number.isRequired,
 };
 
 Cell.propTypes = {
-  x: PropTypes.numberisRequired,
+  x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
   filled: PropTypes.bool,
   life: PropTypes.number,
-  color: PropTypes.number,
+  color: PropTypes.object,
 };
 
 export default CellGridDisplay;
