@@ -22,18 +22,18 @@ public class CellModel {
     final Integer age;
     final Integer lineage;
     final Integer virility;
-    final Integer species_h;
-    final Integer species_s;
-    final Integer species_v;
+    final Integer speciesH;
+    final Integer speciesS;
+    final Integer speciesV;
     final Integer parent_id;
     public CellModel(int x, int y, Cell cell, UniverseSettings universeSettings, OffsetToCell offsetToCell)
     {
         this.age = cell.cellStats.age;
         this.lineage = cell.cellStats.lineage;
         this.virility = cell.cellStats.virility;
-        this.species_h = cell.cellStats.species_h;
-        this.species_s = cell.cellStats.species_s;
-        this.species_v = cell.cellStats.species_v;
+        this.speciesH = cell.cellStats.species_h;
+        this.speciesS = cell.cellStats.species_s;
+        this.speciesV = cell.cellStats.species_v;
         this.parent_id = cell.cellStats.parent_id;
 
         this.x = x;
