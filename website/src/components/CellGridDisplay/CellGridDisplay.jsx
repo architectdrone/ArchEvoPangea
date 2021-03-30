@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './CellGridDisplay.css';
+import {getEnergy, getRegisters} from '../../util/archEvo/objects/Cell';
 
 /**
  * Displays a 2D grid of cells in the world.
@@ -20,10 +21,17 @@ function CellGridDisplay(props) {
           onClick(cell);
         }
       };
+
+      let life;
+      if (cell) {
+        const registers = getRegisters(cell);
+        life = getEnergy(cell);
+      }
       const cellElement = <Cell
         x={x}
         y={y}
         size={cellSize}
+        life={life}
         filled={cell !== null}
         onClick={specificOnClick}
       />;
@@ -42,12 +50,20 @@ function CellGridDisplay(props) {
  * A single rectangle, representing a cell.
  */
 function Cell(props) {
-  const {x, y, size, filled, onClick} = props;
+  const {x, y, size, filled, life, onClick} = props;
   const trueX = x*size;
   const trueY = y*size;
 
+  let fillColor;
+  if (filled) {
+    fillColor = 'rgb(0,' + life +',0)';
+  } else {
+    fillColor = 'rgb(255,255,255)';
+  }
+
   return (<rect
-    className={filled?'filled':'empty'}
+    className='box'
+    style={{fill: fillColor}}
     x={trueX}
     y={trueY}
     width={size}
@@ -91,10 +107,11 @@ CellGridDisplay.propTypes = {
 };
 
 Cell.propTypes = {
-  x: PropTypes.number,
-  y: PropTypes.number,
-  size: PropTypes.number,
+  x: PropTypes.numberisRequired,
+  y: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
   filled: PropTypes.bool,
+  life: PropTypes.number,
   onClick: PropTypes.func.isRequired,
 };
 

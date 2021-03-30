@@ -1,11 +1,4 @@
-.filled {
+.box {
     stroke-width: 1;
     stroke: black;
-    fill: black;
-}
-
-.empty {
-    stroke-width: 1;
-    stroke: black;
-    fill: white;
 }

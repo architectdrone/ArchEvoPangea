@@ -17,6 +17,13 @@ function getRegisters(cell) {
 }
 
 /**
+ * Gets the amount of energy it has.
+ */
+function getEnergy(cell) {
+    return getRegisters(cell)[0].registerValue;
+}
+
+/**
  * Gets the genome.
  */
 function getGenome(cell) {
@@ -74,5 +81,6 @@ export {
     getId,
     getAge,
     getLineage,
+    getEnergy,
     getVirility,
 };
