@@ -24,14 +24,13 @@ function CellGridDisplay(props) {
 
       let life;
       if (cell) {
-        const registers = getRegisters(cell);
         life = getEnergy(cell);
       }
       const cellElement = <Cell
         x={x}
         y={y}
         size={cellSize}
-        life={life}
+        color={{r: 0, g: life, b: 0}}
         filled={cell !== null}
         onClick={specificOnClick}
       />;
@@ -50,15 +49,15 @@ function CellGridDisplay(props) {
  * A single rectangle, representing a cell.
  */
 function Cell(props) {
-  const {x, y, size, filled, life, onClick} = props;
+  const {x, y, size, filled, life, onClick, color} = props;
   const trueX = x*size;
   const trueY = y*size;
 
   let fillColor;
-  if (filled) {
-    fillColor = 'rgb(0,' + life +',0)';
-  } else {
+  if (!filled) {
     fillColor = 'rgb(255,255,255)';
+  } else {
+    fillColor = 'rgb('+color.r+','+color.g+','+color.b+')';
   }
 
   return (<rect
@@ -110,9 +109,10 @@ Cell.propTypes = {
   x: PropTypes.numberisRequired,
   y: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
   filled: PropTypes.bool,
   life: PropTypes.number,
-  onClick: PropTypes.func.isRequired,
+  color: PropTypes.number,
 };
 
 export default CellGridDisplay;
