@@ -25,7 +25,7 @@ public class CellModel {
     final Integer speciesH;
     final Integer speciesS;
     final Integer speciesV;
-    final Integer parent_id;
+    final Integer parentId;
     public CellModel(int x, int y, Cell cell, UniverseSettings universeSettings, OffsetToCell offsetToCell)
     {
         this.age = cell.cellStats.age;
@@ -34,7 +34,7 @@ public class CellModel {
         this.speciesH = cell.cellStats.species_h;
         this.speciesS = cell.cellStats.species_s;
         this.speciesV = cell.cellStats.species_v;
-        this.parent_id = cell.cellStats.parent_id;
+        this.parentId = cell.cellStats.parent_id;
 
         this.x = x;
         this.y = y;
