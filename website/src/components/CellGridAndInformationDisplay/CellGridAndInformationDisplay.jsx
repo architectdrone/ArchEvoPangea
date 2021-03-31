@@ -8,7 +8,7 @@ import CellDisplay from '../CellDisplay/CellDisplay';
  * When clicked on, shows some basic information about the cell.
  */
 function CellGridAndInformationDisplay(props) {
-  const {cells} = props;
+  const {cells, viewOption} = props;
   const [cellIdToDisplay, setCellIdToDisplay] = useState(null);
   let cellToDisplay = null;
   if (cellIdToDisplay !== null) {
@@ -36,7 +36,7 @@ function CellGridAndInformationDisplay(props) {
         viewSize={900}
         worldSize={64}
         onClick={onClick}
-        colorMode={1}/>
+        colorMode={viewOption}/>
       <CellDisplay cell={cellToDisplay}/>
     </div>
   );
@@ -86,6 +86,7 @@ CellGridAndInformationDisplay.propTypes = {
           },
       ),
   ).isRequired,
+  viewOption: PropTypes.number.isRequired,
 };
 
 export default CellGridAndInformationDisplay;

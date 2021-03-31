@@ -13,6 +13,7 @@ import {getCells} from './util/archEvo/objects/Universe';
 import GeneralWorldInformationDisplay from './components/GeneralWorldInformationDisplay/GeneralWorldInformationDisplay';
 import {getIterations,
    isServerRunning} from './util/archEvo/objects/UniverseInformation';
+import ViewOptions from './components/ViewOptions/ViewOptions';
 
 /**
  * These variables control the autoupdate functionality.
@@ -61,6 +62,7 @@ function doAndUpdateInformation(control, setUniverseInformation) {
 function App() {
   const [universeInformation, setUniverseInformation] = useState({});
   const [universeState, setUniverseState] = useState({});
+  const [viewOption, setViewOption] = useState(0);
 
   useEffect(() => {
     update(setUniverseInformation, setUniverseState, true);
@@ -76,6 +78,7 @@ function App() {
       <p>Loading....</p>
     );
   }
+
   return (
     <>
       <WorldController
@@ -88,11 +91,13 @@ function App() {
         stopHandler={
           () => doAndUpdateInformation(stopServer, setUniverseInformation)}
         iterations={getIterations(universeInformation)}
-        isRunning={isServerRunning(universeInformation)}
-        currentServerState="LOL"/>
-      <CellGridAndInformationDisplay cells={getCells(universeState)}/>
+        isRunning={isServerRunning(universeInformation)}/>
+      <CellGridAndInformationDisplay
+        cells={getCells(universeState)}
+        viewOption={viewOption}/>
       <GeneralWorldInformationDisplay
         universeInformation={universeInformation}/>
+      <ViewOptions setViewType={setViewOption}/>
     </>
   );
 }

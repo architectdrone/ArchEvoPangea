@@ -31,6 +31,7 @@ function CellGridDisplay(props) {
       let cellElement;
       if (cell !== null) {
         let color;
+        console.log(colorMode);
         if (colorMode == 0) { // Basic
           color = {r: 0, g: 0, b: 0, rgb: true};
         } else if (colorMode == 1) { // Energy
