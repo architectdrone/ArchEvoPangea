@@ -72,6 +72,34 @@ function getVirility(cell) {
     return cell.virility;
 }
 
+/**
+ * Gets the species H
+ */
+function getSpeciesH(cell) {
+    return cell.speciesH;
+}
+
+/**
+ * Gets the species S
+ */
+ function getSpeciesS(cell) {
+    return cell.speciesS;
+}
+
+/**
+ * Gets the species V
+ */
+ function getSpeciesV(cell) {
+    return cell.speciesV;
+}
+
+/**
+ * Gets the parent Id
+ */
+ function getParentId(cell) {
+    return cell.parentId;
+}
+
 export {
     getInstructionPointer,
     getRegisters,
@@ -83,4 +111,8 @@ export {
     getLineage,
     getEnergy,
     getVirility,
+    getSpeciesH,
+    getSpeciesV,
+    getSpeciesS,
+    getParentId,
 };
