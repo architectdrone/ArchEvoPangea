@@ -8,7 +8,7 @@ import {getEnergy,
   getSpeciesH,
   getSpeciesS,
   getSpeciesV} from '../../util/archEvo/objects/Cell';
-import {pow, floor} from 'mathjs';
+import {pow, floor, round} from 'mathjs';
 
 /**
  * Displays a 2D grid of cells in the world.
@@ -31,15 +31,19 @@ function CellGridDisplay(props) {
       let cellElement;
       if (cell !== null) {
         let color;
-        console.log(colorMode);
         if (colorMode == 0) { // Basic
           color = {r: 0, g: 0, b: 0, rgb: true};
         } else if (colorMode == 1) { // Energy
           color = {r: 0, g: getEnergy(cell), b: 0, rgb: true};
         } else if (colorMode == 2) { // Species
-          color = {h: getSpeciesH(cell),
-            s: getSpeciesS(cell),
-            v: getSpeciesV(cell), rgb: false};
+          const h = getSpeciesH(cell);
+          const s = getSpeciesS(cell);
+          const v = getSpeciesV(cell);
+          if ( h == -1 || s == -1 || v == -1) {
+            color = {h: 0, s: 0, v: 0, rgb: false, noNorm: true};
+          } else {
+            color = {h: h, s: s, v: v, rgb: false, noNorm: false};
+          }
         } else if (colorMode == 3) { // Family
           if (getParentId(cell) == -1) {
             color = {r: 0, g: 0, b: 0, rgb: true};
@@ -120,8 +124,15 @@ function Cell(props) {
     if (color.rgb) {
       fillColor = 'rgb('+color.r+','+color.g+','+color.b+')';
     } else {
-      const sPercent = ((color.s)/255)*100;
-      const vPercent = ((color.v)/255)*100;
+      let sPercent;
+      let vPercent;
+      if (color.noNorm) {
+        sPercent = ((color.s)/255)*100;
+        vPercent = ((color.v)/255)*100;
+      } else {
+        sPercent = round(((((color.s)/255)*0.2)+0.4)*100, 0);
+        vPercent = round(((((color.v)/255)*0.2)+0.4)*100, 0);
+      }
       fillColor = 'hsl('+color.h+','+sPercent+'%,'+vPercent+'%)';
     }
   }
