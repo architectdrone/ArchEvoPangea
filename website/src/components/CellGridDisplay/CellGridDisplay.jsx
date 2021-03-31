@@ -4,28 +4,11 @@ import PropTypes from 'prop-types';
 import './CellGridDisplay.css';
 import {getEnergy,
   getId,
-  getLineage,
   getParentId,
-  getRegisters,
   getSpeciesH,
   getSpeciesS,
   getSpeciesV} from '../../util/archEvo/objects/Cell';
 import {pow, floor} from 'mathjs';
-
-const colors = [
-  {r: 255, g: 0, b: 0, rgb: true},
-  {r: 0, g: 255, b: 0, rgb: true},
-  {r: 0, g: 0, b: 255, rgb: true},
-  {r: 255, g: 255, b: 0, rgb: true},
-  {r: 0, g: 255, b: 255, rgb: true},
-  {r: 255, g: 0, b: 255, rgb: true},
-  {r: 126, g: 0, b: 0, rgb: true},
-  {r: 0, g: 126, b: 0, rgb: true},
-  {r: 0, g: 0, b: 126, rgb: true},
-  {r: 126, g: 126, b: 0, rgb: true},
-  {r: 0, g: 126, b: 126, rgb: true},
-  {r: 126, g: 0, b: 126, rgb: true},
-];
 
 /**
  * Displays a 2D grid of cells in the world.
@@ -34,7 +17,6 @@ function CellGridDisplay(props) {
   const {cells, viewSize, worldSize, onClick, colorMode} = props;
 
   const cellSize = viewSize/worldSize;
-  const grandparents = [];
 
   const cellElements = [];
   for (let x = 0; x < worldSize; x++) {
@@ -57,25 +39,32 @@ function CellGridDisplay(props) {
           color = {h: getSpeciesH(cell),
             s: getSpeciesS(cell),
             v: getSpeciesV(cell), rgb: false};
-        } else if (colorMode == 3) { // Parent
+        } else if (colorMode == 3) { // Family
           if (getParentId(cell) == -1) {
             color = {r: 0, g: 0, b: 0, rgb: true};
           } else {
-            console.log("Let it rip!");
             let parentId = getParentId(cell);
+            let isGrandparent = true;
             // Get grandparent
             while (true) {
               const parentCell = findCellById(parentId, cells);
               if (parentCell === null) {
                 break;
               } else {
+                isGrandparent = false;
                 parentId = getParentId(parentCell);
               }
             }
-            const r = floor(getDigit(parentId, 0)*(256/10));
-            const g = floor(getDigit(parentId, 1)*(256/10));
-            const b = floor(getDigit(parentId, 2)*(256/10));
-            color = {r: r, g: g, b: b, rgb: true};
+
+            if (isGrandparent && !findCellByParentId(getId(cell), cells)) {
+              // If no living parent, and no living children, color black.
+              color = {r: 0, g: 0, b: 0, rgb: true};
+            } else {
+              const r = floor(getDigit(parentId, 0)*(256/10));
+              const g = floor(getDigit(parentId, 1)*(256/10));
+              const b = floor(getDigit(parentId, 2)*(256/10));
+              color = {r: r, g: g, b: b, rgb: true};
+            };
           }
         }
         cellElement = <Cell
@@ -119,7 +108,7 @@ function getDigit(number, digitNumber) {
  * A single rectangle, representing a cell.
  */
 function Cell(props) {
-  const {x, y, size, filled, life, onClick, color} = props;
+  const {x, y, size, filled, onClick, color} = props;
   const trueX = x*size;
   const trueY = y*size;
 
@@ -168,7 +157,20 @@ function findCell(x, y, cells) {
  */
  function findCellById(id, cells) {
   const result = cells.filter((cell) => getId(cell) === id);
-  console.log(result);
+  if (result.length === 1) {
+    return result[0];
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Finds a cell in an unsorted array of cells with the given parent id.
+ * @param {number} parentId the parentId
+ * @param {Array} cells The array of cells.
+ */
+ function findCellByParentId(parentId, cells) {
+  const result = cells.filter((cell) => getParentId(cell) === parentId);
   if (result.length === 1) {
     return result[0];
   } else {
@@ -206,7 +208,6 @@ Cell.propTypes = {
   size: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
   filled: PropTypes.bool,
-  life: PropTypes.number,
   color: PropTypes.object,
 };
 
