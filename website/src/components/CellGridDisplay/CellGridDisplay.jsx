@@ -2,7 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './CellGridDisplay.css';
-import {getEnergy, getRegisters} from '../../util/archEvo/objects/Cell';
+import {getEnergy,
+  getId,
+  getLineage,
+  getParentId,
+  getRegisters,
+  getSpeciesH,
+  getSpeciesS,
+  getSpeciesV} from '../../util/archEvo/objects/Cell';
+import math, { pow } from 'mathjs';
+
+const colors = [
+  {r: 255, g: 0, b: 0, rgb: true},
+  {r: 0, g: 255, b: 0, rgb: true},
+  {r: 0, g: 0, b: 255, rgb: true},
+  {r: 255, g: 255, b: 0, rgb: true},
+  {r: 0, g: 255, b: 255, rgb: true},
+  {r: 255, g: 0, b: 255, rgb: true},
+  {r: 126, g: 0, b: 0, rgb: true},
+  {r: 0, g: 126, b: 0, rgb: true},
+  {r: 0, g: 0, b: 126, rgb: true},
+  {r: 126, g: 126, b: 0, rgb: true},
+  {r: 0, g: 126, b: 126, rgb: true},
+  {r: 126, g: 0, b: 126, rgb: true},
+];
 
 /**
  * Displays a 2D grid of cells in the world.
@@ -11,6 +34,7 @@ function CellGridDisplay(props) {
   const {cells, viewSize, worldSize, onClick, colorMode} = props;
 
   const cellSize = viewSize/worldSize;
+  const grandparents = [];
 
   const cellElements = [];
   for (let x = 0; x < worldSize; x++) {
@@ -26,9 +50,42 @@ function CellGridDisplay(props) {
       if (cell !== null) {
         let color;
         if (colorMode == 0) { // Basic
-          color = {r: 0, g: 0, b: 0};
+          color = {r: 0, g: 0, b: 0, rgb: true};
         } else if (colorMode == 1) { // Energy
-          color = {r: 0, g: getEnergy(cell), b: 0};
+          color = {r: 0, g: getEnergy(cell), b: 0, rgb: true};
+        } else if (colorMode == 2) { // Species
+          color = {h: getSpeciesH(cell),
+            s: getSpeciesS(cell),
+            v: getSpeciesV(cell), rgb: false};
+        } else if (colorMode == 3) { // Parent
+          if (getParentId(cell) == -1) {
+            color = {r: 0, g: 0, b: 0, rgb: true};
+          } else {
+            console.log("Let it rip!");
+            let parentId = getParentId(cell);
+            // Get grandparent
+            while (true) {
+              const parentCell = findCellById(parentId, cells);
+              if (parentCell === null) {
+                break;
+              } else {
+                parentId = getParentId(parentCell);
+              }
+            }
+            
+            let r = 
+
+            if (grandparents.includes(parentId)) {
+              const index = grandparents.indexOf(parentId);
+              const colorIndex = index % colors.length;
+              color = colors[colorIndex];
+            } else {
+              grandparents.push(parentId);
+              const index = grandparents.indexOf(parentId);
+              const colorIndex = index % colors.length;
+              color = colors[colorIndex];
+            }
+          }
         }
         cellElement = <Cell
           x={x}
@@ -59,6 +116,15 @@ function CellGridDisplay(props) {
 }
 
 /**
+ * Gets a digit of a number.
+ */
+function getDigit(number, digitNumber) {
+  let modulus = pow(10, digitNumber+1);
+  let divisor = pow(10, digitNumber)
+  return math.floor((number % modulus)/divisor);
+}
+
+/**
  * A single rectangle, representing a cell.
  */
 function Cell(props) {
@@ -70,7 +136,13 @@ function Cell(props) {
   if (!filled) {
     fillColor = 'rgb(255,255,255)';
   } else {
-    fillColor = 'rgb('+color.r+','+color.g+','+color.b+')';
+    if (color.rgb) {
+      fillColor = 'rgb('+color.r+','+color.g+','+color.b+')';
+    } else {
+      const sPercent = ((color.s)/255)*100;
+      const vPercent = ((color.v)/255)*100;
+      fillColor = 'hsl('+color.h+','+sPercent+'%,'+vPercent+'%)';
+    }
   }
 
   return (<rect
@@ -91,6 +163,21 @@ function Cell(props) {
  */
 function findCell(x, y, cells) {
   const result = cells.filter((cell) => cell.x === x && cell.y === y);
+  if (result.length === 1) {
+    return result[0];
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Finds a cell in an unsorted array of cells.
+ * @param {number} id the id
+ * @param {Array} cells The array of cells.
+ */
+ function findCellById(id, cells) {
+  const result = cells.filter((cell) => getId(cell) === id);
+  console.log(result);
   if (result.length === 1) {
     return result[0];
   } else {
