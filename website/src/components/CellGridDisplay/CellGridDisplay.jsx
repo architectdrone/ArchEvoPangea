@@ -10,7 +10,7 @@ import {getEnergy,
   getSpeciesH,
   getSpeciesS,
   getSpeciesV} from '../../util/archEvo/objects/Cell';
-import math, { pow } from 'mathjs';
+import {pow, floor} from 'mathjs';
 
 const colors = [
   {r: 255, g: 0, b: 0, rgb: true},
@@ -72,19 +72,10 @@ function CellGridDisplay(props) {
                 parentId = getParentId(parentCell);
               }
             }
-            
-            let r = 
-
-            if (grandparents.includes(parentId)) {
-              const index = grandparents.indexOf(parentId);
-              const colorIndex = index % colors.length;
-              color = colors[colorIndex];
-            } else {
-              grandparents.push(parentId);
-              const index = grandparents.indexOf(parentId);
-              const colorIndex = index % colors.length;
-              color = colors[colorIndex];
-            }
+            const r = floor(getDigit(parentId, 0)*(256/10));
+            const g = floor(getDigit(parentId, 1)*(256/10));
+            const b = floor(getDigit(parentId, 2)*(256/10));
+            color = {r: r, g: g, b: b, rgb: true};
           }
         }
         cellElement = <Cell
@@ -119,9 +110,9 @@ function CellGridDisplay(props) {
  * Gets a digit of a number.
  */
 function getDigit(number, digitNumber) {
-  let modulus = pow(10, digitNumber+1);
-  let divisor = pow(10, digitNumber)
-  return math.floor((number % modulus)/divisor);
+  const modulus = pow(10, digitNumber+1);
+  const divisor = pow(10, digitNumber);
+  return floor((number % modulus)/divisor);
 }
 
 /**
