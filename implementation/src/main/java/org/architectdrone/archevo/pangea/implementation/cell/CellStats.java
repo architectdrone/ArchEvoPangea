@@ -21,9 +21,9 @@ public class CellStats {
     }
 
     public void mutateSpeciesColor(Random random) {
-        this.species_h = Math.floorMod((this.species_h + (random.nextInt(3) - 2)), 255);
-        this.species_s = max(min((this.species_s + (random.nextInt(3) - 2)), 255), 0);
-        this.species_v = max(min((this.species_v + (random.nextInt(3) - 2)), 255), 0);
+        this.species_h = Math.floorMod((this.species_h + (random.nextInt(3) - 1)), 256);
+        this.species_s =       max(min((this.species_s + (random.nextInt(3) - 1)), 255), 0);
+        this.species_v =       max(min((this.species_v + (random.nextInt(3) - 1)), 255), 0);
 
     }
 }
