@@ -7,7 +7,8 @@ import {getEnergy,
   getParentId,
   getSpeciesH,
   getSpeciesS,
-  getSpeciesV} from '../../util/archEvo/objects/Cell';
+  getSpeciesV,
+  getIploc} from '../../util/archEvo/objects/Cell';
 import {pow, floor, round} from 'mathjs';
 
 /**
@@ -80,6 +81,8 @@ function CellGridDisplay(props) {
           filled={true}
           onClick={specificOnClick}
           key={(((x+y)*(x+y+1))/2)+y}
+          pointX={iplocToXOffset(getIploc(cell))}
+          pointY={iplocToYOffset(getIploc(cell))}
         />;
       } else {
         cellElement = <Cell
@@ -89,6 +92,8 @@ function CellGridDisplay(props) {
           filled={false}
           onClick={specificOnClick}
           key={(((x+y)*(x+y+1))/2)+y}
+          pointX={1}
+          pointY={1}
         />;
       }
       cellElements.push(cellElement);
@@ -100,6 +105,64 @@ function CellGridDisplay(props) {
       {cellElements}
     </svg>
   );
+}
+
+/**
+ * Gets the x offset from iploc
+ */
+function iplocToXOffset(iploc) {
+  if (getBinaryDigit(iploc, 7)) {
+    return 1;
+  } else if (getBinaryDigit(iploc, 6)) {
+    return 0;
+  } else if (getBinaryDigit(iploc, 5)) {
+    return -1;
+  } else if (getBinaryDigit(iploc, 4)) {
+    return 1;
+  } else if (getBinaryDigit(iploc, 3)) {
+    return -1;
+  } else if (getBinaryDigit(iploc, 2)) {
+    return 1;
+  } else if (getBinaryDigit(iploc, 1)) {
+    return 0;
+  } else if (getBinaryDigit(iploc, 0)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+/**
+ * Gets the y offset from iploc
+ */
+ function iplocToYOffset(iploc) {
+  if (getBinaryDigit(iploc, 7)) {
+    return 1;
+  } else if (getBinaryDigit(iploc, 6)) {
+    return 1;
+  } else if (getBinaryDigit(iploc, 5)) {
+    return 1;
+  } else if (getBinaryDigit(iploc, 4)) {
+    return 0;
+  } else if (getBinaryDigit(iploc, 3)) {
+    return 0;
+  } else if (getBinaryDigit(iploc, 2)) {
+    return -1;
+  } else if (getBinaryDigit(iploc, 1)) {
+    return -1;
+  } else if (getBinaryDigit(iploc, 0)) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+
+/**
+ * Gets the value of the digit
+ */
+function getBinaryDigit(number, digitNumber) {
+  return (number >>> digitNumber) & 1;
 }
 
 /**
@@ -115,7 +178,7 @@ function getDigit(number, digitNumber) {
  * A single rectangle, representing a cell.
  */
 function Cell(props) {
-  const {x, y, size, filled, onClick, color} = props;
+  const {x, y, size, filled, onClick, color, pointX, pointY} = props;
   const trueX = x*size;
   const trueY = y*size;
 
@@ -138,16 +201,53 @@ function Cell(props) {
       fillColor = 'hsl('+color.h+','+sPercent+'%,'+vPercent+'%)';
     }
   }
+
+  const lowX = trueX;
+  const lowY = trueY;
+  const midX = trueX+(size/2);
+  const midY = trueY+(size/2);
+  const hiX = trueX+size;
+  const hiY = trueY+size;
+  const lineOriginX = midX;
+  const lineOriginY = midY;
+  let lineEndX;
+  let lineEndY;
+  if (pointX == 1) {
+    lineEndX = hiX;
+  } else if (pointX == 0) {
+    lineEndX = midX;
+  } else if (pointX == -1) {
+    lineEndX = lowX;
+  }
+  if (pointY == 1) {
+    lineEndY = hiY;
+  } else if (pointY == 0) {
+    lineEndY = midY;
+  } else if (pointY == -1) {
+    lineEndY = lowY;
+  }
+
   const key = (((x+y)*(x+y+1))/2)+y; // Cantor Pairing Function
-  return (<rect
-    key={key}
-    className='box'
-    style={{fill: fillColor}}
-    x={trueX}
-    y={trueY}
-    width={size}
-    height={size}
-    onClick={() => onClick()}/>);
+
+  return (
+    <>
+      <rect
+        key={key}
+        className='box'
+        style={{fill: fillColor}}
+        x={trueX}
+        y={trueY}
+        width={size}
+        height={size}
+        onClick={() => onClick()}/>
+      {filled ? <line
+        x1={lineOriginX}
+         x2={lineEndX}
+         y1={lineOriginY}
+         y2={lineEndY}
+         stroke='yellow'/> : null}
+    </>
+    );
 }
 
 /**
@@ -224,6 +324,8 @@ Cell.propTypes = {
   onClick: PropTypes.func.isRequired,
   filled: PropTypes.bool,
   color: PropTypes.object,
+  pointX: PropTypes.number,
+  pointY: PropTypes.number,
 };
 
 export default CellGridDisplay;

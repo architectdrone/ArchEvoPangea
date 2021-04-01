@@ -24,6 +24,13 @@ function getEnergy(cell) {
 }
 
 /**
+ * Gets the iploc.
+ */
+ function getIploc(cell) {
+    return getRegisters(cell)[7].registerValue;
+}
+
+/**
  * Gets the genome.
  */
 function getGenome(cell) {
@@ -110,6 +117,7 @@ export {
     getAge,
     getLineage,
     getEnergy,
+    getIploc,
     getVirility,
     getSpeciesH,
     getSpeciesV,
