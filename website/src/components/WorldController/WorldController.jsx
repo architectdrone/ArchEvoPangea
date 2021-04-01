@@ -8,7 +8,6 @@ function WorldController(props) {
     const {stepHandler,
         startHandler,
         stopHandler,
-        currentServerState,
         isRunning,
         iterations} = props;
 
@@ -47,7 +46,6 @@ WorldController.propTypes = {
     stepHandler: PropTypes.func.isRequired,
     startHandler: PropTypes.func.isRequired,
     stopHandler: PropTypes.func.isRequired,
-    currentServerState: PropTypes.string.isRequired,
     isRunning: PropTypes.bool.isRequired,
     iterations: PropTypes.number.isRequired,
 };

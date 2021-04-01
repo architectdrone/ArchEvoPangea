@@ -19,10 +19,12 @@ import {round} from 'mathjs';
             </td>
             <td>
                 <table>
-                    <tr>
-                        <td>Iterations per Generation</td>
-                        <td>{iterationsPerGeneation}</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>Iterations per Generation</td>
+                            <td>{iterationsPerGeneation}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </td>
         </tr>

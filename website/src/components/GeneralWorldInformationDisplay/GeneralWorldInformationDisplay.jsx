@@ -34,20 +34,22 @@ import GreatestAgeData from './GreatestAgeData';
     const iterations = getIterations(universeInformation);
     return (
         <table>
-            <NumberOfOrganismsData
-              numberOfOrganisms={numberOfOrganisms}
-              worldSize={worldSize}
-              influxRate={influxRate}
-              iterationCost={iterationCost}
-              initialEnergy={initialEnergy}
-              />
-            <GreatestVirilityData greatestVirility={greatestVirility}/>
-            <LongestLineageData
-                longestLineage={longestLineage}
-                iterations = {iterations} />
-            <GreatestAgeData
-                greatestAge={greatestAge}
-                iterations = {iterations}/>
+            <tbody>
+                <NumberOfOrganismsData
+                numberOfOrganisms={numberOfOrganisms}
+                worldSize={worldSize}
+                influxRate={influxRate}
+                iterationCost={iterationCost}
+                initialEnergy={initialEnergy}
+                />
+                <GreatestVirilityData greatestVirility={greatestVirility}/>
+                <LongestLineageData
+                    longestLineage={longestLineage}
+                    iterations = {iterations} />
+                <GreatestAgeData
+                    greatestAge={greatestAge}
+                    iterations = {iterations}/>
+            </tbody>
         </table>
     );
 }

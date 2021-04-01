@@ -53,15 +53,17 @@ import PropTypes from 'prop-types';
             </td>
             <td>
                 <table>
-                    <tr><td>Saturation</td><td>{saturation}%</td></tr>
-                    <tr>
-                        <td>Static Population Size Percentage</td>
-                        <td>{staticPopulationSizePercentage}%</td>
-                    </tr>
-                    <tr>
-                        <td>Static Population Size</td>
-                        <td>{staticPopulationSize}</td>
-                    </tr>
+                    <tbody>
+                        <tr><td>Saturation</td><td>{saturation}%</td></tr>
+                        <tr>
+                            <td>Static Population Size Percentage</td>
+                            <td>{staticPopulationSizePercentage}%</td>
+                        </tr>
+                        <tr>
+                            <td>Static Population Size</td>
+                            <td>{staticPopulationSize}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </td>
         </tr>

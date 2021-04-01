@@ -30,7 +30,7 @@ function CellGridAndInformationDisplay(props) {
   return (
     <div
       className="flex-container"
-      style={{'flex-direction': 'row', 'display': 'flex'}}>
+      style={{'flexDirection': 'row', 'display': 'flex'}}>
       <CellGridDisplay
         cells={cells}
         viewSize={900}

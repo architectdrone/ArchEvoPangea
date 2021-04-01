@@ -79,6 +79,7 @@ function CellGridDisplay(props) {
           color={color}
           filled={true}
           onClick={specificOnClick}
+          key={(((x+y)*(x+y+1))/2)+y}
         />;
       } else {
         cellElement = <Cell
@@ -87,6 +88,7 @@ function CellGridDisplay(props) {
           size={cellSize}
           filled={false}
           onClick={specificOnClick}
+          key={(((x+y)*(x+y+1))/2)+y}
         />;
       }
       cellElements.push(cellElement);
@@ -136,8 +138,9 @@ function Cell(props) {
       fillColor = 'hsl('+color.h+','+sPercent+'%,'+vPercent+'%)';
     }
   }
-
+  const key = (((x+y)*(x+y+1))/2)+y; // Cantor Pairing Function
   return (<rect
+    key={key}
     className='box'
     style={{fill: fillColor}}
     x={trueX}

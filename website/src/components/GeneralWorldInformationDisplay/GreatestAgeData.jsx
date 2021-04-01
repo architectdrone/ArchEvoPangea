@@ -22,10 +22,12 @@ import {round} from 'mathjs';
             </td>
             <td>
                 <table>
-                    <tr>
-                        <td>Percentage of Simulation</td>
-                        <td>{percentageOfSimulation}%</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>Percentage of Simulation</td>
+                            <td>{percentageOfSimulation}%</td>
+                        </tr>
+                    </tbody>
                 </table>
             </td>
         </tr>
