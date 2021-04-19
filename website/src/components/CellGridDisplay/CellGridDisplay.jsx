@@ -15,7 +15,12 @@ import {pow, floor, round} from 'mathjs';
  * Displays a 2D grid of cells in the world.
  */
 function CellGridDisplay(props) {
-  const {cells, viewSize, worldSize, onClick, colorMode} = props;
+  const {cells,
+    viewSize,
+    worldSize,
+    onClick,
+    colorMode,
+    highlightCellId} = props;
 
   const cellSize = viewSize/worldSize;
 
@@ -83,6 +88,7 @@ function CellGridDisplay(props) {
           key={(((x+y)*(x+y+1))/2)+y}
           pointX={iplocToXOffset(getIploc(cell))}
           pointY={iplocToYOffset(getIploc(cell))}
+          isHighlighted={getId(cell) == highlightCellId}
         />;
       } else {
         cellElement = <Cell
@@ -178,10 +184,19 @@ function getDigit(number, digitNumber) {
  * A single rectangle, representing a cell.
  */
 function Cell(props) {
-  const {x, y, size, filled, onClick, color, pointX, pointY} = props;
+  const {x,
+    y,
+    size,
+    filled,
+    onClick,
+    color,
+    pointX,
+    pointY,
+    isHighlighted} = props;
   const trueX = x*size;
   const trueY = y*size;
 
+  // Determine fill color
   let fillColor;
   if (!filled) {
     fillColor = 'rgb(255,255,255)';
@@ -202,6 +217,7 @@ function Cell(props) {
     }
   }
 
+  // Arrow
   const lowX = trueX;
   const lowY = trueY;
   const midX = trueX+(size/2);
@@ -227,6 +243,7 @@ function Cell(props) {
     lineEndY = lowY;
   }
 
+  // Key - It has to be unique, so we use a (R, R) -> R function
   const key = (((x+y)*(x+y+1))/2)+y; // Cantor Pairing Function
 
   return (
@@ -240,6 +257,11 @@ function Cell(props) {
         width={size}
         height={size}
         onClick={() => onClick()}/>
+      {isHighlighted ? <circle
+        cx={midX}
+        cy={midY}
+        r={size/4}
+        style={{fill: 'rgb(255, 0, 0)'}} /> : null }
       {filled ? <line
         x1={lineOriginX}
          x2={lineEndX}
@@ -315,6 +337,7 @@ CellGridDisplay.propTypes = {
   // 0 - Basic
   // 1 - Energy
   colorMode: PropTypes.number.isRequired,
+  highlightCellId: PropTypes.number,
 };
 
 Cell.propTypes = {
@@ -326,6 +349,7 @@ Cell.propTypes = {
   color: PropTypes.object,
   pointX: PropTypes.number,
   pointY: PropTypes.number,
+  isHighlighted: PropTypes.bool,
 };
 
 export default CellGridDisplay;

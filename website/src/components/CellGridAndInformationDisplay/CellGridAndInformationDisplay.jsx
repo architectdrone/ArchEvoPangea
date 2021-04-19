@@ -2,13 +2,14 @@ import {React, useState} from 'react';
 import CellGridDisplay from '../CellGridDisplay/CellGridDisplay';
 import PropTypes from 'prop-types';
 import CellDisplay from '../CellDisplay/CellDisplay';
+import {getWorldSize} from '../../util/archEvo/objects/UniverseInformation';
 
 /**
  * Shows a grid of cells.
  * When clicked on, shows some basic information about the cell.
  */
 function CellGridAndInformationDisplay(props) {
-  const {cells, viewOption} = props;
+  const {cells, universeInformation, viewOption} = props;
   const [cellIdToDisplay, setCellIdToDisplay] = useState(null);
   let cellToDisplay = null;
   if (cellIdToDisplay !== null) {
@@ -34,9 +35,10 @@ function CellGridAndInformationDisplay(props) {
       <CellGridDisplay
         cells={cells}
         viewSize={900}
-        worldSize={64}
+        worldSize={getWorldSize(universeInformation)}
         onClick={onClick}
-        colorMode={viewOption}/>
+        colorMode={viewOption}
+        highlightCellId={cellIdToDisplay}/>
       <CellDisplay cell={cellToDisplay}/>
     </div>
   );
@@ -86,6 +88,7 @@ CellGridAndInformationDisplay.propTypes = {
           },
       ),
   ).isRequired,
+  universeInformation: PropTypes.shape,
   viewOption: PropTypes.number.isRequired,
 };
 

@@ -94,6 +94,7 @@ function App() {
         isRunning={isServerRunning(universeInformation)}/>
       <CellGridAndInformationDisplay
         cells={getCells(universeState)}
+        universeInformation={universeInformation}
         viewOption={viewOption}/>
       <GeneralWorldInformationDisplay
         universeInformation={universeInformation}/>
