@@ -393,9 +393,8 @@ class CellContainerIterationHelperTest {
                 .build();
         cellContainer = new LinearContainer(size);
         List<Integer> genome = new ArrayList<>(Collections.nCopies(16, universeSettings.getIsa().stringToBinary("INCREMENT REG_A")));
-        genome.set(4, universeSettings.getIsa().stringToBinary("ATTACK"));
+        genome.set(4, universeSettings.getIsa().stringToBinary("REPRODUCE"));
         cell = new Cell(genome, null);
-        cell.setRegister(0b111, 0b00010000);
         cellContainer.set(1, 1, cell);
         CellContainer newCellContainer = CellContainerIterationHelper.iterate(cellContainer, universeSettings, new Random());
         assertEquals(4, newCellContainer.get(1, 1).getRegister(3));

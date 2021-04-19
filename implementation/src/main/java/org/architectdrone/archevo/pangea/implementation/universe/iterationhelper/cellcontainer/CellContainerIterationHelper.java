@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.architectdrone.archevo.pangea.implementation.action.Action;
-import org.architectdrone.archevo.pangea.implementation.action.Attack;
-import org.architectdrone.archevo.pangea.implementation.action.Move;
-import org.architectdrone.archevo.pangea.implementation.action.Reproduce;
+
+import org.architectdrone.archevo.pangea.implementation.action.*;
 import org.architectdrone.archevo.pangea.implementation.cell.Cell;
 import org.architectdrone.archevo.pangea.implementation.cellcontainer.exceptions.IntersectionException;
 import org.architectdrone.archevo.pangea.implementation.combathandler.CombatResult;
@@ -87,6 +85,7 @@ public class CellContainerIterationHelper {
         else if (action instanceof Reproduce){
             runReproduceAction((Reproduce) action, cell_x, cell_y, cell, newCellContainer, universeSettings, random);
         }
+        else if (action instanceof ExternalDoNothing) {}
         else
         {
             throw new RuntimeException("runActionWithExternalEffects called on an unknown state changing action");

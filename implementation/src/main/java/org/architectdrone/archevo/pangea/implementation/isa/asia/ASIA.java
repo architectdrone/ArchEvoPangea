@@ -69,7 +69,7 @@ public class ASIA implements ISA {
             Offset offset = iplocToOffset(getRegisterValue(currentCell, 0b111));
             if (offset.x == 0 && offset.y == 0)
             {
-                return new DoNothing();
+                return new ExternalDoNothing();
             }
             return new Reproduce(offset.x, offset.y);
         }
@@ -78,7 +78,7 @@ public class ASIA implements ISA {
             Offset offset = iplocToOffset(getRegisterValue(currentCell, 0b111));
             if (offset.x == 0 && offset.y == 0)
             {
-                return new DoNothing();
+                return new ExternalDoNothing();
             }
             return new Move(offset.x, offset.y);
         }
@@ -87,7 +87,7 @@ public class ASIA implements ISA {
             Offset offset = iplocToOffset(getRegisterValue(currentCell, 0b111));
             if (offset.x == 0 && offset.y == 0)
             {
-                return new DoNothing();
+                return new ExternalDoNothing();
             }
             return new Attack(offset.x, offset.y);
         }

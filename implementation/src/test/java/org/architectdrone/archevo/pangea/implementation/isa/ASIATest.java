@@ -3,12 +3,8 @@ package org.architectdrone.archevo.pangea.implementation.isa;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.architectdrone.archevo.pangea.implementation.action.Attack;
-import org.architectdrone.archevo.pangea.implementation.action.DoNothing;
-import org.architectdrone.archevo.pangea.implementation.action.Move;
-import org.architectdrone.archevo.pangea.implementation.action.MoveInstructionPointer;
-import org.architectdrone.archevo.pangea.implementation.action.RegisterUpdate;
-import org.architectdrone.archevo.pangea.implementation.action.Reproduce;
+
+import org.architectdrone.archevo.pangea.implementation.action.*;
 import org.architectdrone.archevo.pangea.implementation.cell.Cell;
 import org.architectdrone.archevo.pangea.implementation.isa.asia.ASIA;
 import org.architectdrone.archevo.pangea.implementation.misc.OffsetToCell;
@@ -316,7 +312,7 @@ class ASIATest {
             void getAction_withReproduceInstruction_doesNothing_whenIPLOCIs0() {
                 Cell test_cell = getCellWithInstructionAtIP0(0b00000000000);
                 test_cell.setRegister(0b111, 0);
-                DoNothing result = (DoNothing) new ASIA().getAction(test_cell, return_null);
+                ExternalDoNothing result = (ExternalDoNothing) new ASIA().getAction(test_cell, return_null);
             }
         }
 
@@ -455,7 +451,7 @@ class ASIATest {
             void getAction_withMoveInstruction_doesNothing_whenIPLOCIs0() {
                 Cell test_cell = getCellWithInstructionAtIP0(0b01100000000);
                 test_cell.setRegister(0b111, 0);
-                DoNothing result = (DoNothing) new ASIA().getAction(test_cell, return_null);
+                ExternalDoNothing result = (ExternalDoNothing) new ASIA().getAction(test_cell, return_null);
             }
         }
 
@@ -556,7 +552,7 @@ class ASIATest {
             void getAction_withAttackInstruction_doesNothing_whenIPLOCIs0() {
                 Cell test_cell = getCellWithInstructionAtIP0(0b11100000000);
                 test_cell.setRegister(0b111, 0);
-                DoNothing result = (DoNothing) new ASIA().getAction(test_cell, return_null);
+                ExternalDoNothing result = (ExternalDoNothing) new ASIA().getAction(test_cell, return_null);
             }
         }
 
